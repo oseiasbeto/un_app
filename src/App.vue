@@ -6,6 +6,8 @@ import { computed, onMounted, ref, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import Cookies from "js-cookie";
 import { getSocket, disconnectSocket } from '@/services/socket';
+import { getPlayerId } from "webtonative/OneSignal";
+import { statusBar } from "webtonative"
 
 // Estado para o tema
 const isDark = ref(false);
@@ -70,6 +72,13 @@ onMounted(async () => {
     isDark.value = false;
     document.documentElement.classList.remove('dark');
   }*/
+
+  statusBar({
+    style: "light",
+    color: "18222d",
+    overlay: true //Only for android
+  });
+
   if (sessionId && !isAuthenticated.value) {
     await store.dispatch('refreshToken', sessionId)
       .then(() => {
@@ -114,6 +123,17 @@ onMounted(async () => {
         } else {
           console.log('Nenhum socket encontrado');
           return false;
+        }
+        
+        if (!user.value?.player_id_onesignal) {
+          getPlayerId().then(async function (playerId) {
+            if (playerId) {
+              // handle for playerId
+              await store.dispatch("updateUser", {
+                playerIdOneSignal: playerId
+              })
+            }
+          });
         }
       })
       .finally(() => {

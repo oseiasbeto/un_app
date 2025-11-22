@@ -118,7 +118,18 @@ export default {
                 console.error("Failed to search users:", err);
                 throw err;
             }
-        }
+        },
+        async updateUser({ commit }, data) {
+            try {
+                const response = await api.put('/users', data);
+
+                return response
+            } catch (err) {
+                // Log de erro
+                console.error("Failed to update user:", err);
+                throw err;
+            }
+        },
     },
     getters: {
         users: (state) => state.users

@@ -1,6 +1,12 @@
 import { io } from 'socket.io-client';
 
-const SOCKET_URL = 'http://192.168.1.130:5050';
+const node_env = 'prod'
+
+const SOCKET_URL = node_env == 'dev' ?  
+        'http://localhost:5050' : node_env == 'prod' ? 
+        'https://api.paporápido.com' : 
+        'http://192.168.1.130:5050'
+
 let socket;
 
 /**
