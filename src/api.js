@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Promise } from 'core-js'
 import store from "@/store"
-//import Cookies from "js-cookie"
+import Cookies from "js-cookie"
 
 const node_env = 'prod'
 
@@ -28,6 +28,27 @@ instance.interceptors.response.use(
     }
 );
 
+instance.interceptors.response.use(
+    response => response,
+    error => {
+        if (error.response?.status === 404) {
+            window.location.href = '/404';
+        }
+        return Promise.reject(error);
+    }
+);
+
+instance.interceptors.response.use(
+    response => response,
+    error => {
+        if (error.response?.status === 500) {
+            window.location.href = '/500';
+        }
+        return Promise.reject(error);
+    }
+)
+*/
+
 // Interceptor de resposta 
 instance.interceptors.response.use(
     response => response,
@@ -49,28 +70,6 @@ instance.interceptors.response.use(
     }
 );
 
-instance.interceptors.response.use(
-    response => response,
-    error => {
-        if (error.response?.status === 404) {
-            window.location.href = '/404';
-        }
-        return Promise.reject(error);
-    }
-);
-
-instance.interceptors.response.use(
-    response => response,
-    error => {
-        if (error.response?.status === 500) {
-            window.location.href = '/500';
-        }
-        return Promise.reject(error);
-    }
-)
-
-
-*/
 instance.interceptors.request.use((config) => {
     const token = store.getters.accessToken
     if (token) {
