@@ -16,7 +16,7 @@
 
     <!-- Título -->
     <h1 class="text-4xl font-extrabold text-white mb-3 tracking-tight">
-      Papo Rápido
+      Unkule
     </h1>
 
     <!-- Subtítulo -->

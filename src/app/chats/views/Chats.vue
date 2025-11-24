@@ -3,7 +3,7 @@
         class="shrink-0 fixed top-0 w-full z-[100] px-5 py-4 border-b border-light-border dark:border-dark-border bg-light-header dark:bg-dark-header">
         <div class="flex items-center justify-between">
             <div>
-                <h2 class="text-xl font-semibold text-light-text dark:text-dark-text">PapoRápido</h2>
+                <h2 class="text-xl font-semibold text-light-text dark:text-dark-text">Unkule</h2>
             </div>
 
             <div>
