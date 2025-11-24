@@ -76,7 +76,7 @@ onMounted(async () => {
   statusBar({
     style: "dark",
     color: "18222d",
-    overlay: true //Only for android
+    overlay: false //Only for android
   });
 
   if (sessionId && !isAuthenticated.value) {
