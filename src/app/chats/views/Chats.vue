@@ -1,27 +1,10 @@
 <template>
-    <div
-        class="shrink-0 fixed top-0 w-full z-[100] px-5 py-4 border-b border-light-border dark:border-dark-border bg-light-header dark:bg-dark-header">
-        <div class="flex items-center justify-between">
-            <div>
-                <h2 class="text-xl font-semibold text-light-text dark:text-dark-text">Unkule01</h2>
-            </div>
-
-            <div>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="p-[30px]">
-
-    </div>
     <div>
         <VirtualChatList :conversations="conversations?.items || []" :loading="loadingConversations"
             :loading-more="loadingMoreConversations" :user-id="user?._id" :has-more="conversations?.pagination?.hasMore"
             @select="select" @new-chat="router.push('/new-message')" @load-more="loadMoreConversations">
         </VirtualChatList>
     </div>
-
 </template>
 
 <script setup>

@@ -155,7 +155,7 @@ onUnmounted(() => {
 <template>
 
   <div
-    class="font-primary w-screen text-sm h-screen text-light-text-primary dark:text-dark-text-primary bg-light-bg dark:bg-dark-bg pt-safe-top pb-safe-bottom">
+    class="font-primary relative w-screen text-sm h-screen text-light-text-primary dark:text-dark-text-primary bg-light-bg dark:bg-dark-bg">
     <!-- start main app area-->
     <div v-if="!loading">
       <!--start content-->
