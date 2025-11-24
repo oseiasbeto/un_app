@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-const node_env = 'prod'
+const node_env = 'dev'
 
 const SOCKET_URL = node_env == 'dev' ?  
         'http://localhost:5050' : node_env == 'prod' ? 

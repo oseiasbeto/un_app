@@ -3,7 +3,7 @@ import { Promise } from 'core-js'
 import store from "@/store"
 import Cookies from "js-cookie"
 
-const node_env = 'prod'
+const node_env = 'dev'
 
 const instance = axios.create({
     baseURL: node_env == 'dev' ? 

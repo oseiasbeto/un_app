@@ -74,7 +74,7 @@ onMounted(async () => {
   }*/
 
   statusBar({
-    style: "dark",
+    style: "light",
     color: "18222d",
     overlay: false //Only for android
   });
