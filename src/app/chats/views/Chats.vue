@@ -16,8 +16,8 @@
 
     </div>
     <div>
-        <VirtualChatList :conversations="conversations.items || []" :loading="loadingConversations"
-            :loading-more="loadingMoreConversations" :user-id="user._id" :has-more="conversations?.pagination?.hasMore"
+        <VirtualChatList :conversations="conversations?.items || []" :loading="loadingConversations"
+            :loading-more="loadingMoreConversations" :user-id="user?._id" :has-more="conversations?.pagination?.hasMore"
             @select="select" @new-chat="router.push('/new-message')" @load-more="loadMoreConversations">
         </VirtualChatList>
     </div>

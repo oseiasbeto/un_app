@@ -125,16 +125,15 @@ onMounted(async () => {
           return false;
         }
         
-        if (!user.value?.player_id_onesignal) {
-          getPlayerId().then(async function (playerId) {
-            if (playerId) {
-              // handle for playerId
+        getPlayerId().then(async function (playerId) {
+          if (playerId) {
+            if (!user.value?.player_id_onesignal || user.value?.player_id_onesignal !== playerId) {
               await store.dispatch("updateUser", {
                 playerIdOneSignal: playerId
               })
             }
-          });
-        }
+          }
+        });
       })
       .finally(() => {
         loading.value = false
