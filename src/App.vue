@@ -74,7 +74,7 @@ onMounted(async () => {
   }*/
 
   statusBar({
-    style: "light",
+    style: "dark",
     color: "18222d",
     overlay: true //Only for android
   });
@@ -155,7 +155,7 @@ onUnmounted(() => {
 <template>
 
   <div
-    class="font-primary w-screen text-sm h-screen text-light-text-primary dark:text-dark-text-primary bg-light-bg dark:bg-dark-bg">
+    class="font-primary w-screen text-sm h-screen text-light-text-primary dark:text-dark-text-primary bg-light-bg dark:bg-dark-bg pt-safe-top pb-safe-bottom">
     <!-- start main app area-->
     <div v-if="!loading">
       <!--start content-->

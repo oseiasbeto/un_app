@@ -4,10 +4,10 @@
 
 html,
 body {
-    touch-action: pan-x pan-y;
-    -webkit-user-select: none;
-    user-select: none;
-    overflow-y: hidden;
+  touch-action: pan-x pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+  overflow-y: hidden;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
@@ -15,12 +15,14 @@ body {
 }
 
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 video::-webkit-media-controls {
-    display: none !important;
+  display: none !important;
 }
 
 .vue-recycle-scroller {
@@ -57,4 +59,20 @@ video::-webkit-media-controls {
 .scroller::-webkit-scrollbar {
   display: none;
   /* Chrome, Safari */
+}
+
+.pt-safe-top {
+  padding-top: 25px !important;
+}
+
+.pb-safe-bottom {
+  padding-bottom: 25px !important;
+}
+
+.h-safe-top {
+  height: 25px !important;
+}
+
+.h-safe-bottom {
+  height: 25px !important;
 }
