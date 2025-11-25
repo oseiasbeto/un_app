@@ -9,7 +9,9 @@
             class="flex-1 mt-[52px] pt-4 !overflow-y-scroll bg-chat-bg bg-cover">
 
             <div v-if="!loadingMessages">
-                <div ref="loadTrigger" v-if="cachedMessages?.pagination?.hasMore"></div>
+                <div class="flex justify-center" ref="loadTrigger" v-if="cachedMessages?.pagination?.hasMore">
+                     <SpinnerSmall />
+                </div>
                 <MessageBox v-for="(message, index) in cachedMessages?.items || []" 
                 :key="message._id" 
                 :message="message"

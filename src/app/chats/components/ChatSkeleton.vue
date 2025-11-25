@@ -7,10 +7,10 @@
     </div>
 
     <!-- Conteúdo -->
-    <div class="flex-1 space-y-3">
+    <div class="flex-1 space-y-2">
       <div class="flex items-center justify-between gap-3">
         <!-- Nome -->
-        <div class="h-3 w-[120px] bg-background-secondary rounded-lg"></div>
+        <div class="h-[14px] w-[120px] bg-background-secondary rounded-lg"></div>
       
       </div>
 

@@ -5,7 +5,7 @@ import { useStore } from "vuex"
 import { computed, onMounted, ref, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import Cookies from "js-cookie";
-import { getSocket, disconnectSocket } from '@/services/socket';
+import { getSocket, connectSocket, disconnectSocket } from '@/services/socket';
 import { getPlayerId } from "webtonative/OneSignal";
 import { statusBar } from "webtonative"
 
@@ -15,37 +15,23 @@ const loading = ref(true)
 const store = useStore()
 const route = useRoute()
 const sessionId = Cookies.get("session_id")
+const isOnline = ref(true)
 
 const user = computed(() => {
   return store.getters.currentUser
 })
+const accessToken = computed(() => {
+  return store.getters.accessToken
+})
 
 const isAuthenticated = computed(() => {
-  const accessToken = store.getters.accessToken
-
-  if (accessToken) return true
+  if (accessToken.value) return true
   else return false
 })
 
-const sendMessageSound = new Audio('/sounds/chat-bca16b82.mp3');
 const notificationSound = new Audio('/sounds/boop.mp3');
 
 notificationSound.preload = 'auto'
-sendMessageSound.preload = 'auto'
-
-const playSendMessageSound = async () => {
-  try {
-    // Reseta o áudio pro início (permite tocar várias vezes seguidas)
-    sendMessageSound.currentTime = 0;
-    await sendMessageSound.play();
-
-  } catch (err) {
-    console.log(err)
-    // Usuário não interagiu ainda com a página → navegador bloqueia som
-    // Isso é normal no Chrome/Firefox. Só toca após primeira interação.
-    console.log("Som bloqueado (sem interação do usuário ainda)");
-  }
-}
 
 // Função para tocar o som (com fallback silencioso)
 const playNotificationSound = async () => {
@@ -60,6 +46,30 @@ const playNotificationSound = async () => {
     // Isso é normal no Chrome/Firefox. Só toca após primeira interação.
     console.log("Som bloqueado (sem interação do usuário ainda)");
   }
+}
+
+// Função quando o usuário fica offline
+const handleOffline = () => {
+  isOnline.value = false;
+}
+
+// Função quando o usuário volta online
+const handleOnline = () => {
+  isOnline.value = true;
+  // Conecta ao WebSocket e informa ao backend que o usuário está online.
+  connectSocket(accessToken.value)
+}
+
+// Configurar listeners de conexão
+const setupConnectionListeners = () => {
+  window.addEventListener('online', handleOnline);
+  window.addEventListener('offline', handleOffline);
+}
+
+// Remover listeners de conexão
+const removeConnectionListeners = () => {
+  window.removeEventListener('online', handleOnline);
+  window.removeEventListener('offline', handleOffline);
 }
 
 onMounted(async () => {
@@ -82,11 +92,15 @@ onMounted(async () => {
     });
   }
 
+  // Configurar listeners de conexão
+  setupConnectionListeners();
+
+
   if (sessionId && !isAuthenticated.value) {
     await store.dispatch('refreshToken', sessionId)
       .then(() => {
         const socket = getSocket();
-
+        
         if (socket) {
           socket.on('newMessage', async (msg) => {
             const myId = user.value?._id;
@@ -147,6 +161,9 @@ onUnmounted(() => {
     socket.off('newMessage');
     disconnectSocket()
   }
+
+  // Remover listeners de conexão
+  removeConnectionListeners();
 });
 </script>
 
@@ -157,7 +174,7 @@ onUnmounted(() => {
     <!-- start main app area-->
     <div v-if="!loading">
       <!--start content-->
-      <div class="h-full">
+      <div v-if="isOnline" class="h-full">
         <router-view v-slot="{ Component }">
           <keep-alive :include="['Chats', 'NewMessage', 'Messages']">
             <component :is="Component" />
@@ -165,6 +182,12 @@ onUnmounted(() => {
         </router-view>
       </div>
       <!--end content-->
+
+      <!--start content offline-->
+      <div v-else>
+        <h1>Conecta-se a Rede</h1>
+      </div>
+      <!--end content offline-->
 
       <!--start sidebar-->
       <!--<sidebar v-show="isAuthenticated && route.meta.rootPage == 'main'" />-->

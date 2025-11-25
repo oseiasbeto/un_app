@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-const node_env = 'prod'
+const node_env = process.env.NODE_ENV === 'production' ? 'prod' : 'lan'
 
 const SOCKET_URL = node_env == 'dev' ?  
         'http://localhost:5050' : node_env == 'prod' ? 
@@ -16,7 +16,7 @@ let socket;
  */
 
 export function connectSocket(token) {
-    if (!socket) {
+    if (!socket?.id) {
         console.log('Tentando conectar ao WebSocket com token:', token ? 'Token presente' : 'Token ausente');
         socket = io(SOCKET_URL, {
             auth: { token }
