@@ -1,12 +1,14 @@
 <template>
     <div
-        class="fixed w-full top-0 z-50 bg-light-header dark:bg-dark-header border-b border-light-border dark:border-dark-border">
-        <div class="flex items-center h-[55px] px-4 gap-3">
+        class="fixed w-full top-0 z-50 bg-background-primary h-[52px] border-b border-border-primary">
+        <div class="flex items-center h-full px-4 gap-3">
             <!-- Botão voltar -->
-            <button @click="$emit('go-back', query)" class="p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full">
-                <svg class="w-6 h-6 text-light-text-secondary dark:text-white" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M19 12H5m7-7l-7 7 7 7" />
+            <button @click="$emit('go-back', query)"
+                class="p-1 text-text-secondary hover:bg-background-secondary mr-1 rounded-full transition-colors">
+                <svg fill="none" width="24" viewBox="0 0 24 24" height="24">
+                    <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"
+                        d="M3 12a1 1 0 0 1 .293-.707l6-6a1 1 0 0 1 1.414 1.414L6.414 11H20a1 1 0 1 1 0 2H6.414l4.293 4.293a1 1 0 0 1-1.414 1.414l-6-6A1 1 0 0 1 3 12Z">
+                    </path>
                 </svg>
             </button>
 
@@ -18,7 +20,7 @@
                     type="text"
                     @input="handleSearch"
                     placeholder="Buscar contatos..."
-                    class="w-full pl-0 bg-transparent text-sm text-light-text dark:text-dark-text placeholder-gray-500 focus:outline-none"
+                    class="w-full pl-0 bg-transparent text-sm text-text-primary placeholder-text-secondary focus:outline-none"
                     autocomplete="off" 
                 />
             </div>

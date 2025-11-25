@@ -48,7 +48,17 @@ export default {
                 modules.push(newModule)
             } else {
                 const module = modules[index]
-                module.items.unshift(...newModule.items.reverse())
+                const messages = module.items
+
+                // Filtra os novos posts para remover quaisquer que já existam no cache
+                const uniqueItems = newModule.items.filter(
+                    (msg) =>
+                        !messages.some(
+                            (existingMsg) => existingMsg._id === msg._id
+                        )
+                );
+
+                module.items.unshift(...uniqueItems.reverse())
                 module.pagination = newModule.pagination
             }
         },
@@ -141,6 +151,7 @@ export default {
         ADD_OR_UPDATE_CONVERSATION(state, conversation) {
             const updatedConv = conversation; // pode estar incompleto!
             const items = state.conversations.items;
+            
 
             const index = items.findIndex(c => c._id === updatedConv._id);
 
@@ -192,7 +203,7 @@ export default {
                     sender: message.sender,
                     content: message.content || '[Mídia]',
                     message_type: message.message_type,
-                    created_at: message.createdAt
+                    created_at: message.created_at
                 }
             }
         },
@@ -315,7 +326,6 @@ export default {
                 const res = await api.post('/conversations/direct', { userId })
                 const { conversation } = res.data
 
-                //commit('ADD_OR_UPDATE_CONVERSATION', conversation)
                 commit('SET_CONVERSATION', conversation)
 
                 return conversation

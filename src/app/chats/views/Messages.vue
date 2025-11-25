@@ -6,20 +6,16 @@
         </div>
 
         <div ref="messagesContainer" :style="{ paddingBottom: inputHeight + 'px' }"
-            class="flex-1 mt-14 pt-4 !overflow-y-scroll bg-chat-bg bg-cover">
-            <!-- Fundo fixo com cor + pattern oficial -->
-            <div class="fixed inset-0 top-14 pointer-events-none z-1" :style="{
-                backgroundColor: '#18222d',
-                backgroundImage: 'url(/img/pattern.svg)',
-                backgroundRepeat: 'repeat',
-                backgroundSize: 'cover',  // Ou 'auto' para repetir perfeitamente
-                opacity: 0.05
-            }"></div>
+            class="flex-1 mt-[52px] pt-4 !overflow-y-scroll bg-chat-bg bg-cover">
 
             <div v-if="!loadingMessages">
                 <div ref="loadTrigger" v-if="cachedMessages?.pagination?.hasMore"></div>
-                <MessageBox v-for="msg in cachedMessages?.items || []" :key="msg._id" :message="msg"
-                    :user-id="user?._id" />
+                <MessageBox v-for="(message, index) in cachedMessages?.items || []" 
+                :key="message._id" 
+                :message="message"
+                :user-id="user?._id" 
+                :previousMessage="cachedMessages?.items[index - 1]"
+                />
             </div>
             <div class="h-full flex justify-center items-center w-full" v-else>
                 <SpinnerSmall />

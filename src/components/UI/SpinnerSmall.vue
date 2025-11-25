@@ -1,39 +1,21 @@
 <template>
-    <svg aria-label="A carregar…" class="dark:text-dark-text-secondary w-6 h-6 spinner-small" role="img" viewBox="0 0 100 100">
-        <rect fill="currentColor" height="10" opacity="0" rx="5" ry="5" transform="rotate(-90 50 50)" width="28" x="67"
-            y="45"></rect>
-        <rect fill="currentColor" height="10" opacity="0.125" rx="5" ry="5" transform="rotate(-45 50 50)" width="28"
-            x="67" y="45"></rect>
-        <rect fill="currentColor" height="10" opacity="0.25" rx="5" ry="5" transform="rotate(0 50 50)" width="28" x="67"
-            y="45"></rect>
-        <rect fill="currentColor" height="10" opacity="0.375" rx="5" ry="5" transform="rotate(45 50 50)" width="28"
-            x="67" y="45"></rect>
-        <rect fill="currentColor" height="10" opacity="0.5" rx="5" ry="5" transform="rotate(90 50 50)" width="28" x="67"
-            y="45"></rect>
-        <rect fill="currentColor" height="10" opacity="0.625" rx="5" ry="5" transform="rotate(135 50 50)" width="28"
-            x="67" y="45"></rect>
-        <rect fill="currentColor" height="10" opacity="0.75" rx="5" ry="5" transform="rotate(180 50 50)" width="28"
-            x="67" y="45"></rect>
-        <rect fill="currentColor" height="10" opacity="0.875" rx="5" ry="5" transform="rotate(225 50 50)" width="28"
-            x="67" y="45"></rect>
-    </svg>
+    <div class="spinner-md">
+      <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+        </path>
+      </svg>
+    </div>
 </template>
 
-<style>
-.spinner-small {
-    animation-duration: .8s;
-    animation-name: animate-spinner-small;
-    animation-iteration-count: infinite;
-    animation-timing-function: steps(8, end)
+<style scoped>
+.spinner-xs, .spinner-sm, .spinner-md {
+  animation: spin 1s linear infinite;
 }
 
-@keyframes animate-spinner-small {
-    0% {
-        transform: rotate(180deg);
-    }
-
-    100% {
-        transform: rotate(540deg);
-    }
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

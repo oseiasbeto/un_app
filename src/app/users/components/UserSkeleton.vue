@@ -3,19 +3,19 @@
   <div class="flex items-center animate-pulse">
     <!-- Avatar Skeleton -->
     <div class="relative flex-shrink-0">
-      <div class="w-12 h-12 bg-gray-300 dark:bg-dark-bg-secondary rounded-full"></div>
+      <div class="w-[40px] h-[40px] bg-background-secondary rounded-full"></div>
     </div>
 
     <!-- Textos Skeleton -->
-    <div class="flex-1 ml-4 space-y-2">
+    <div class="flex-1 ml-2 space-y-2">
       <div class="flex items-center justify-between gap-3">
         <!-- Nome -->
-        <div class="h-3 bg-gray-300 dark:bg-dark-bg-secondary rounded w-40"></div>
+        <div class="h-3 bg-background-secondary rounded w-[130px]"></div>
         
       </div>
 
       <!-- Bio / username -->
-      <div class="h-3 bg-gray-200 dark:bg-dark-bg-secondary/90 0 rounded w-full"></div>
+      <div class="h-3 bg-background-secondary rounded w-[90%]"></div>
     </div>
   </div>
 </template>

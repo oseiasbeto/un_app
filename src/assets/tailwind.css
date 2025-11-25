@@ -2,77 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body {
-  touch-action: pan-x pan-y;
-  -webkit-user-select: none;
-  user-select: none;
-  overflow-y: hidden;
-}
+@layer base {
+  :root {
+    /* Light Mode */
+    --color-primary: 15 115 255;   
+    --color-secondary: 2 132 199;   
+    --color-tertiary: 3 105 161;
+    
+    --color-bg-primary: 250 250 250;    /* #fafafa */
+    --color-bg-secondary: 255 255 255;  /* #ffffff */
+    --color-bg-tertiary: 244 244 245;   /* #f4f4f5 */
+    
+    --color-text-primary: 24 24 27;     /* #18181b */
+    --color-text-secondary: 82 82 91;   /* #52525b */
+    --color-text-tertiary: 161 161 170; /* #a1a1aa */
+    
+    --color-border-primary: 228 228 231; /* #e4e4e7 */
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
+      /* Cores de estado - Light */
+    --color-success: 16 185 129;    /* #10b981 */
+    --color-warning: 245 158 11;    /* #f59e0b */
+    --color-danger: 239 68 68;      /* #ef4444 */
+    --color-info: 6 182 212;        /* #06b6d4 */
+  }
 
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
-  /* Firefox */
-}
-
-video::-webkit-media-controls {
-  display: none !important;
-}
-
-.vue-recycle-scroller {
-  width: 100% !important;
-}
-
-.vue-recycle-scroller__item-view {
-  width: 100% !important;
-  transform: none !important;
-  /* ← ESSA LINHA MATA O translateY BUG */
-  position: static !important;
-}
-
-.scroller {
-  contain: layout style;
-  /* melhora performance */
-}
-
-.scroller {
-  height: 100%;
-  overflow-y: auto;
-  scrollbar-width: none;
-  /* Firefox */
-  -ms-overflow-style: none;
-  /* IE e Edge */
-}
-
-.scroller-item {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.scroller::-webkit-scrollbar {
-  display: none;
-  /* Chrome, Safari */
-}
-
-.pt-safe-top {
-  padding-top: 25px !important;
-}
-
-.pb-safe-bottom {
-  padding-bottom: 25px !important;
-}
-
-.h-safe-top {
-  height: 25px !important;
-}
-
-.h-safe-bottom {
-  height: 25px !important;
+  .dark {
+    /* Dark Mode */
+    --color-secondary: 186 230 253; 
+    --color-tertiary: 224 242 254; 
+    
+    --color-bg-primary: 21 29 40;     
+    --color-bg-secondary: 34 46 63;     
+    --color-bg-tertiary: 28 39 56; 
+    
+    --color-text-primary: 255 255 255;  /* #fff */
+    --color-text-secondary: 171 184 201; /* #abb8c9 */
+    --color-text-tertiary: 113 113 122; /* #71717a */
+    
+    --color-border-primary: 44 58 78;   
+    
+    /* Cores de estado - Dark */
+    --color-success: 52 211 153;    /* #34d399 */
+    --color-warning: 251 191 36;    /* #fbbf24 */
+    --color-danger: 248 113 113;    /* #f87171 */
+    --color-info: 34 211 238;       /* #22d3ee */
+  }
 }

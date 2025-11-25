@@ -1,19 +1,20 @@
 <template>
     <!-- WhatsApp Android Header - Verde clássico -->
     <header
-        class="fixed px-4 top-0 left-0 right-0 z-50 flex h-14 items-center justify-between bg-light-header dark:bg-dark-header border-b border-light-border dark:border-dark-border">
+        class="fixed px-4 top-0 left-0 right-0 z-50 flex h-[52px] items-center justify-between bg-background-primary border-b border-border-primary">
         <div class="flex items-center">
             <!-- Botão Voltar -->
             <button @click="$emit('goBack')"
-                class="mr-6 p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors duration-150">
-                <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M19 12H5m7-7l-7 7 7 7" />
+                class="p-1 text-text-secondary hover:bg-background-secondary mr-1 rounded-full transition-colors">
+                <svg fill="none" width="24" viewBox="0 0 24 24" height="24">
+                    <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"
+                        d="M3 12a1 1 0 0 1 .293-.707l6-6a1 1 0 0 1 1.414 1.414L6.414 11H20a1 1 0 1 1 0 2H6.414l4.293 4.293a1 1 0 0 1-1.414 1.414l-6-6A1 1 0 0 1 3 12Z">
+                    </path>
                 </svg>
             </button>
 
             <!-- Título centralizado -->
-            <h1 class="text-lg font-medium text-white select-none">
+            <h1 class="text-lg ml-3 font-bold font-secondary text-white select-none">
                 {{ title }}
             </h1>
         </div>

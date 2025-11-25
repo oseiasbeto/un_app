@@ -2,7 +2,7 @@
 <template>
   <div class="min-h-screen bg-[#fafafa] dark:bg-dark-bg flex flex-col px-6 pt-8 pb-12">
     <!-- Botão Voltar -->
-    <button @click="emit('back')" class="mb-10 flex items-center text-telegram-300 font-medium text-lg">
+    <button @click="emit('back')" class="mb-10 flex items-center text-primary font-medium text-lg">
       <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
       </svg>
@@ -32,7 +32,7 @@
             inputmode="numeric" maxlength="11" placeholder="923 456 789"
             class="w-full text-xl pl-1.5 font-normal tracking-widest text-gray-900 dark:text-white bg-transparent outline-none transition-colors duration-200 pb-4 placeholder-gray-400/70 selection:bg-[#33A8DF]/20"
             :class="focused
-              ? 'border-b-2 border-telegram-400'
+              ? 'border-b-2 border-primary'
               : 'border-b-2 border-gray-300 dark:border-gray-700'" autocomplete="off" />
         </div>
       </div>
@@ -57,7 +57,7 @@
     <div class="mt-auto">
       <button @click="sendCode" :disabled="!isValid"
         class="w-full py-5 rounded-2xl  text-lg font-bold transition-all duration-200 shadow-xl" :class="isValid
-          ? 'bg-telegram-400 hover:bg-telegram-500 text-white active:scale-95'
+          ? 'bg-primary text-white active:scale-95'
           : 'bg-gray-200 dark:bg-gray-800 text-gray-500 cursor-not-allowed'">
         Continuar
       </button>

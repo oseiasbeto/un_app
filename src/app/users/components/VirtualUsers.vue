@@ -1,6 +1,6 @@
 <template>
     <div class="h-screen flex flex-col">
-        <DynamicScroller :items="users" :min-item-size="72" class="scroller" 
+        <DynamicScroller :items="users" :min-item-size="72" :class="!loading ? 'scroller' : 'overflow-hidden'" 
         :key="ukey || undefined" 
         key-field="_id"
             @scroll="handleScroll">
@@ -12,8 +12,7 @@
             </template>
 
             <template #default="{ item, active }">
-                <DynamicScrollerItem :item="item" :active="active" :size-dependencies="[item.created_at, item._id]"
-                    class="border-b border-gray-100 dark:border-gray-800">
+                <DynamicScrollerItem :item="item" :active="active" :size-dependencies="[item.created_at, item._id]">
                     <UserItem :user="item" @click="$emit('select', item)" />
                 </DynamicScrollerItem>
             </template>

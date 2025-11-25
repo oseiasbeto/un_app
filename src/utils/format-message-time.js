@@ -11,13 +11,16 @@ moment.locale('pt-br');
  * @param {Object} options - { showSeconds: false }
  * @returns {string} - "Agora", "5 min", "Ontem", "14:30", "15/03", "15/03/2024"
  */
-export const formatMessageTime = (date, options = {}) => {
-    
-    const msgTime = moment(date);
+export const formatMessageTime = (date, currentTime) => {
 
+    const msgTime = moment(date);
     if (!msgTime.isValid()) return '—';
 
-    const now = moment();
+    // Se currentTime for timestamp, converte para moment
+    const now = typeof currentTime === 'number'
+        ? moment(currentTime)
+        : moment(currentTime);
+
     const diffMinutes = now.diff(msgTime, 'minutes');
 
     // === AGORA / MINUTOS ATRÁS ===

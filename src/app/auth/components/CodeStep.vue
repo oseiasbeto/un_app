@@ -61,7 +61,7 @@
         :disabled="code.length !== 5 || loading"
         class="w-full py-5 rounded-2xl text-lg font-bold transition-all duration-200 shadow-xl active:scale-95"
         :class="code.length === 5 && !loading
-          ? 'bg-telegram-400 text-white hover:bg-telegram-500'
+          ? 'bg-primary text-white hover:bg-telegram-500'
           : 'bg-gray-200 dark:bg-gray-800 text-gray-500 cursor-not-allowed'"
       >
         {{ loading ? 'Verificando...' : 'Enviar' }}

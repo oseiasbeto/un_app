@@ -1,24 +1,22 @@
 <template>
-  <div class="flex w-full items-center px-5 py-4 border-b border-light-border dark:border-dark-border animate-pulse">
+  <div class="flex w-full items-center px-4 py-2 gap-3 animate-pulse">
     <!-- Avatar skeleton -->
     <div class="relative flex-shrink-0">
-      <div class="w-14 h-14 bg-gray-300 dark:bg-dark-bg-secondary rounded-full"></div>
+      <div class="w-[52px] h-[52px] bg-background-secondary rounded-full"></div>
       
-      <!-- Bolinha online simulada (opcional – fica mais vivo) 
-      <div class="absolute bottom-0 right-0 w-4 h-4 bg-gray-400 dark:bg-gray-600 rounded border-3 border-light-bg dark:border-dark-bg"></div>-->
     </div>
 
     <!-- Conteúdo -->
-    <div class="flex-1 ml-4 space-y-3">
+    <div class="flex-1 space-y-3">
       <div class="flex items-center justify-between gap-3">
         <!-- Nome -->
-        <div class="h-3 w-40 bg-gray-300 dark:bg-dark-bg-secondary rounded"></div>
+        <div class="h-3 w-[120px] bg-background-secondary rounded-lg"></div>
       
       </div>
 
       <div class="flex items-center justify-between gap-3">
         <!-- Última mensagem -->
-        <div class="h-3 w-full bg-gray-300 dark:bg-dark-bg-secondary rounded"></div>
+        <div class="h-3 w-[80%] bg-background-secondary rounded-lg"></div>
       </div>
     </div>
   </div>

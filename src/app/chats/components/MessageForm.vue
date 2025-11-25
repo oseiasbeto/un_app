@@ -1,29 +1,30 @@
 <template>
   <div
-    class="border-t w-full border-light-border dark:border-dark-border bg-light-bg dark:bg-dark-bg-secondary/[0.4]">
-    <form @submit.prevent="send" class="px-4 py-2 flex items-center gap-3">
+    class="w-full bg-background-primary">
+    <form @submit.prevent="send" class="px-4 py-2 pb-1 flex items-center gap-3">
 
       <!-- Textarea compacto e lindo -->
       <div class="flex-1">
         <textarea ref="textareaRef" v-model="inputMessage" @input="autoResize"
           @keydown.enter.exact.prevent="handleEnter" @keydown.enter.shift.exact="allowNewLine" @focus="emit('focus')"
-          rows="1" placeholder="Mensagem" class="w-full resize-none overflow-hidden scroll-pt-4
-                 px-3 py-2 bg-transparent 
-                 text-light-text dark:text-dark-text text-[17px] leading-snug
-                 placeholder-light-text-secondary/70 dark:placeholder-dark-text-secondary/70
+          rows="1" placeholder="Mensagem" 
+          class="w-full resize-none overflow-hidden scroll-pt-4
+                 px-4 py-2 bg-background-secondary 
+                text-base leading-snug
+                 placeholder-light-text-secondary/70 rounded-[23px] dark:placeholder-dark-text-secondary/70
                 focus:outline-none
                  whitespace-pre-wrap break-words
-                 min-h-[30px]" style="line-height: 1.5;" />
+                 min-h-[30px]" style="line-height: 20px;" />
       </div>
 
       <!-- Botão enviar -->
       <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 scale-90"
         enter-to-class="opacity-100 scale-100" leave-active-class="transition ease-in duration-150"
         leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-90">
-        <button v-if="hasContent" type="submit" :disabled="props.disabled" class="p-2 bg-telegram-500 hover:bg-telegram-600 disabled:opacity-50
-                 text-white rounded-full shadow-md flex-shrink-0
-                 transition-all duration-200 active:scale-95">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" id="send"
+        <button v-if="hasContent" type="submit" :disabled="props.disabled" class="p-1.5 bg-primary disabled:opacity-50
+                 text-white rounded-full flex-shrink-0
+                 transition-all duration-200 mb-0.5 active:scale-95">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24" id="send"
             class="icon glyph">
             <path
               d="M21.66,12a2,2,0,0,1-1.14,1.81L5.87,20.75A2.08,2.08,0,0,1,5,21a2,2,0,0,1-1.82-2.82L5.46,13H11a1,1,0,0,0,0-2H5.46L3.18,5.87A2,2,0,0,1,5.86,3.25h0l14.65,6.94A2,2,0,0,1,21.66,12Z"

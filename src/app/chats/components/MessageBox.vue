@@ -1,61 +1,139 @@
 <template>
+  <!-- Separador de data -->
+  <div v-if="showDateSeparator" class="flex py-4 justify-center">
+    <div class="bg-separator bg-opacity-50 px-3 py-1 rounded-full">
+      <span class="text-[13px] text-text-secondary font-medium">
+        {{ formatDateSeparator(message.created_at) }}
+      </span>
+    </div>
+  </div>
+
   <div :class="[
-    'flex mb-2 px-4',
+    'flex px-4 mb-2',
     isSent ? 'justify-end' : 'justify-start'
   ]">
     <div :class="[
-      'group relative max-w-[75%] px-4 py-3 rounded-2xl shadow-sm',
+      'rounded-2xl relative px-[14px] py-2 shadow-sm',
       isSent
-        ? 'bg-telegram-600 text-white rounded-br-md'
-        : 'bg-gray-100 text-black dark:bg-[#2b5278] dark:text-white rounded-bl-md'
+        ? 'bg-primary text-text-primary'
+        : 'bg-background-secondary text-text-primary',
+      // Efeito para mensagens com apenas emojis
+      isEmojiOnly 
+        ? 'bg-transparent shadow-none p-0 rounded-none' 
+        : 'max-w-[75%]',
+      // Bordas para mensagens consecutivas
+      message.status === 'sending' ? 'opacity-20' : 'opacity-100'
     ]">
       <!-- Conteúdo da mensagem -->
-      <p class="text-base leading-snug break-words">
+      <p :class="[
+        'break-words leading-snug',
+        isEmojiOnly ? 'text-4xl' : 'text-[15px]'
+      ]">
         {{ message.content }}
       </p>
-
-      <!-- Horário + status (sempre no canto inferior direito) -->
-      <div class="flex items-end justify-end mt-1 gap-1">
-        <span class="text-xs opacity-70">
-          {{ formatMessageTime(message.created_at) }}
-        </span>
-
-        <!-- Status de envio (só aparece em mensagens enviadas) -->
-        <div v-if="isSent" class="flex items-center">
-          <!-- Enviando... -->
-          <svg v-if="message?.status === 'sending'" class="w-4 h-4 animate-spin opacity-70" fill="none"
-            viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-          </svg>
-
-          <!-- Enviada (um check) -->
-          <svg v-else-if="message?.status === 'sent'" class="w-4 h-4" fill="none" stroke="currentColor"
-            viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-          </svg>
-
-          <!-- Lida (dois checks azuis) -->
-          <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M4 12.9L7.14286 16.5L15 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-              stroke-linejoin="round" />
-            <path d="M20 7.5625L11.4283 16.5625L11 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-              stroke-linejoin="round" />
-          </svg>
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { formatMessageTime } from '@/utils/format-message-time'
 import { computed } from 'vue'
 
 const props = defineProps({
   message: { type: Object, required: true },
-  userId: { type: String, required: true }
+  userId: { type: String, required: true },
+  previousMessage: Object
 })
 
 const isSent = computed(() => props.message.sender._id === props.userId)
+
+// Verifica se a mensagem contém apenas emojis (1-3 emojis)
+const isEmojiOnly = computed(() => {
+  const content = props.message.content.trim()
+  
+  // Se contém apenas números, não é emoji
+  if (/^\d+$/.test(content)) return false
+  
+  // Se contém caracteres alfanuméricos comuns, não é emoji
+  if (/^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>?~ ]+$/.test(content)) return false
+  
+  // Regex para detectar apenas emojis reais
+  const emojiRegex = /^(?:[\p{Emoji}\u200d\uFE0F]+)+$/gu
+  const isOnlyEmojis = emojiRegex.test(content)
+  
+  if (!isOnlyEmojis) return false
+  
+  // Conta quantos emojis tem
+  const emojiCount = (content.match(/[\p{Emoji}]/gu) || []).length
+  
+  return emojiCount <= 3 && emojiCount >= 1
+})
+
+// Verifica se deve mostrar o separador de data
+const showDateSeparator = computed(() => {
+  // Se não há mensagem anterior, sempre mostra o separador
+  if (!props.previousMessage) return true
+  
+  const currentDate = new Date(props.message.created_at)
+  const previousDate = new Date(props.previousMessage.created_at)
+  
+  // Compara ano, mês e dia (ignora horas, minutos, segundos)
+  return (
+    currentDate.getFullYear() !== previousDate.getFullYear() ||
+    currentDate.getMonth() !== previousDate.getMonth() ||
+    currentDate.getDate() !== previousDate.getDate()
+  )
+})
+
+// Formata o separador de data no estilo Facebook
+const formatDateSeparator = (dateString) => {
+  const date = new Date(dateString)
+  const today = new Date()
+  const yesterday = new Date(today)
+  yesterday.setDate(yesterday.getDate() - 1)
+  
+  // Reseta as horas para comparar apenas a data
+  const todayReset = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+  const yesterdayReset = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate())
+  const dateReset = new Date(date.getFullYear(), date.getMonth(), date.getDate())
+  
+  // Verifica se é hoje
+  if (dateReset.getTime() === todayReset.getTime()) {
+    return 'Hoje'
+  }
+  
+  // Verifica se é ontem
+  if (dateReset.getTime() === yesterdayReset.getTime()) {
+    return 'Ontem'
+  }
+  
+  // Verifica se é este ano
+  if (date.getFullYear() === today.getFullYear()) {
+    // Formata como "quarta, 30 de julho"
+    const weekdays = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado']
+    const months = [
+      'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
+      'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
+    ]
+    
+    const weekday = weekdays[date.getDay()]
+    const day = date.getDate()
+    const month = months[date.getMonth()]
+    
+    return `${weekday}, ${day} de ${month}`
+  }
+  
+  // Data de outro ano - "quarta, 30 de julho de 2023"
+  const weekdays = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado']
+  const months = [
+    'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
+    'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
+  ]
+  
+  const weekday = weekdays[date.getDay()]
+  const day = date.getDate()
+  const month = months[date.getMonth()]
+  const year = date.getFullYear()
+  
+  return `${weekday}, ${day} de ${month} de ${year}`
+}
 </script>

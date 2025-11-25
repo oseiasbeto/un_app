@@ -34,7 +34,7 @@
             placeholder="Seu nome"
             class="w-full text-xl pl-1.5 font-normal tracking-wider text-gray-900 dark:text-white bg-transparent outline-none transition-colors duration-200 pb-4 placeholder-gray-400/70 selection:bg-[#33A8DF]/20"
             :class="focused
-              ? 'border-b-2 border-telegram-300'
+              ? 'border-b-2 border-primary'
               : 'border-b-2 border-gray-300 dark:border-gray-700'"
             autocomplete="name"
           />
@@ -56,7 +56,7 @@
         :disabled="!name.trim() || loading"
         class="w-full py-5 rounded-2xl text-xl font-bold transition-all duration-200 shadow-xl active:scale-95"
         :class="name.trim()
-          ? 'bg-telegram-400 text-white hover:bg-telegram-500'
+          ? 'bg-primary text-white'
           : 'bg-gray-200 dark:bg-gray-800 text-gray-500 cursor-not-allowed'"
       >
         Continuar →

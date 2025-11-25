@@ -63,21 +63,24 @@ const playNotificationSound = async () => {
 }
 
 onMounted(async () => {
-  /* 
-  const savedTheme = localStorage.getItem('theme');
+  const savedTheme = 'dark';
   if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     isDark.value = true;
     document.documentElement.classList.add('dark');
+    statusBar({
+      style: "light",
+      color: "151d28",
+      overlay: false //Only for android
+    });
   } else {
     isDark.value = false;
     document.documentElement.classList.remove('dark');
-  }*/
-
-  statusBar({
-    style: "light",
-    color: "18222d",
-    overlay: false //Only for android
-  });
+    statusBar({
+      style: "light",
+      color: "fff",
+      overlay: false //Only for android
+    });
+  }
 
   if (sessionId && !isAuthenticated.value) {
     await store.dispatch('refreshToken', sessionId)
@@ -89,6 +92,7 @@ onMounted(async () => {
             const myId = user.value?._id;
             const isFromMe = msg.sender?._id === myId;
             const currentConvId = route.params?.convId || route.query?.convId;
+
 
             // Atualiza conversa na sidebar
             store.commit("ADD_OR_UPDATE_CONVERSATION", msg.conversation);
@@ -108,23 +112,17 @@ onMounted(async () => {
               const isChatOpen = currentConvId === msg.conversation._id;
               const isAppVisible = !document.hidden;
 
-              if (!isChatOpen || !isAppVisible) {
-                playNotificationSound();
-              }
-
               // Marca como lido automaticamente só se eu estiver vendo exatamente essa conversa
               if (isChatOpen && isAppVisible && route.name === 'Messages') {
                 await store.dispatch("markAsRead", msg.conversation._id);
               }
-            } else {
-              playSendMessageSound()
             }
           })
         } else {
           console.log('Nenhum socket encontrado');
           return false;
         }
-        
+
         getPlayerId().then(async function (playerId) {
           if (playerId) {
             if (!user.value?.player_id_onesignal || user.value?.player_id_onesignal !== playerId) {
@@ -155,7 +153,7 @@ onUnmounted(() => {
 <template>
 
   <div
-    class="font-primary relative w-screen text-sm h-screen text-light-text-primary dark:text-dark-text-primary bg-light-bg dark:bg-dark-bg">
+    class="font-primary bg-background-primary text-text-primary relative w-screen text-sm h-screen text-light-text-primary">
     <!-- start main app area-->
     <div v-if="!loading">
       <!--start content-->

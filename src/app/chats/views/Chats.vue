@@ -1,9 +1,9 @@
 <template>
     <div
-        class="shrink-0 fixed top-0 w-full z-[100] px-5 py-4 border-b border-light-border dark:border-dark-border bg-light-header dark:bg-dark-header">
+        class="shrink-0 fixed flex items-center top-0 w-full z-[100] px-5 h-[52px] border-b border-border-primary bg-background-primary">
         <div class="flex items-center justify-between">
             <div>
-                <h2 class="text-xl font-semibold text-light-text dark:text-dark-text">Unkule</h2>
+                <h2 class="text-lg font-secondary font-bold text-text-primary">Mensagens</h2>
             </div>
 
             <div>
@@ -12,9 +12,7 @@
         </div>
     </div>
 
-    <div class="p-[30px]">
-
-    </div>
+    <div class="h-[51px]"></div>
     <div>
         <VirtualChatList :conversations="conversations?.items || []" :loading="loadingConversations"
             :loading-more="loadingMoreConversations" :user-id="user?._id" :has-more="conversations?.pagination?.hasMore"

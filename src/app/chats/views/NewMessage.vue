@@ -4,8 +4,8 @@
             <Navbar v-if="!showSearchForn" @go-back="router.back" title="Nova mensagem">
                 <template #right>
                     <button @click="showSearchForn = true"
-                        class="p-2 hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors duration-150">
-                        <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        class="p-2 text-text-secondary hover:bg-background-secondary rounded-full transition-colors duration-150">
+                        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8" />
                             <path d="m21 21-4.35-4.35" />
@@ -17,19 +17,10 @@
             <SearchForm @search="handleSearch" @go-back="closeSearchForm" v-else />
         </div>
 
-        <div class="pt-1">
-            <div class="h-[53px]"></div>
-        </div>
+        <div class="h-[51px]"></div>
+        
         <VirtualUsers :ukey="ukey" :users="users.items || []" :loading="loadingLoadUsers" :loading-more="loadingMoreUsers"
-            :has-more="users?.pagination?.hasMore" @load-more="loadMoreUsers" @select="select">
-            <template #before-content>
-                <div v-show="users?.items?.length" class="px-4 pt-3 pb-1">
-                    <p class="text-light-text-secondary text-sm dark:text-dark-text-secondary">
-                        Contatos
-                    </p>
-                </div>
-            </template>
-        </VirtualUsers>
+            :has-more="users?.pagination?.hasMore" @load-more="loadMoreUsers" @select="select"/>
     </div>
 </template>
 

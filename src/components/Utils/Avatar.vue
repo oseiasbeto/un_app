@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-light-card dark:bg-dark-bg-secondary/90 shrink-0 relative overflow-hidden rounded-full border border-light-border dark:border-dark-border"
+    <div class="bg-light-card dark:bg-dark-bg-secondary/90 shrink-0 relative overflow-hidden rounded-full border border-border-primary"
         :class="[sizeClasses]" role="img" :aria-label="`Avatar de ${altText || 'nome'}`">
         <img v-lazy="props?.url && props.url" :alt="`Avatar de ${altText || 'nome'}`" class=" w-full h-full object-cover"
             :class="[sizeClasses]" />
@@ -32,8 +32,8 @@ const sizeClasses = computed(() => {
     return {
         xs: 'w-6 h-6',
         sm: 'w-8 h-8',
-        md: 'w-11 h-11',
-        lg: 'w-12 h-12',
+        md: 'w-[40px] h-[40px]',
+        lg: 'w-[52px] h-[52px]',
         big: 'w-[90px] h-[90px]'
     }[props.size] || 'w-11 h-11';
 });
