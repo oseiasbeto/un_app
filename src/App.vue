@@ -39,27 +39,6 @@ const reloadApp = () => {
   window.location.reload();
 }
 
-const forceUserOfflineImmediate = (userId) => {
-  const beaconSent = navigator.sendBeacon(
-    `https://api.1kole.com/v1/users/force-offline/${userId}`
-  );
-
-  logger.log(`📡 Beacon enviado: ${beaconSent}`)
-
-  // Método 2: Fetch com timeout muito curto
-  if (!beaconSent) {
-    fetch(`https://api.1kole.com/v1/users/force-offline/${userId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      keepalive: true, // Permite sobreviver ao fechamento
-      signal: AbortSignal.timeout(500) // Timeout de apenas 500ms!
-    }).catch(() => {
-      // Ignora erros - o importante é tentar
-      logger.log('Fallback fetch tentado');
-    });
-  }
-}
-
 // Função para tocar o som (com fallback silencioso)
 const playNotificationSound = async () => {
   try {
@@ -88,9 +67,6 @@ const handleOffline = async () => {
     logger.log('✅ Socket desconectado com sucesso');
   } catch (error) {
     logger.log('⚠️ Socket não conseguiu desconectar, usando fallback...');
-
-    // Estratégia 2: Beacon API - funciona mesmo sem conexão
-    forceUserOfflineImmediate(user.value?._id);
   }
 }
 
@@ -129,7 +105,7 @@ const setThemeColor = (theme) => {
     overlay: false //Only for android
   });
 }
-
+let heartbeat;
 onMounted(async () => {
   /* 
   if (savedTheme.value === 'dark' || (!savedTheme.value && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -192,6 +168,12 @@ onMounted(async () => {
               }
             }
           })
+
+          heartbeat = setInterval(() => {
+            if (socket?.connected) {
+              socket.emit('heartbeat'); // só isso!
+            }
+          }, 15_000); // a cada 15 segundos
         } else {
           logger.log('Nenhum socket encontrado');
           return false;
@@ -232,6 +214,8 @@ onUnmounted(() => {
 
   // Remover listeners de conexão
   removeConnectionListeners();
+
+  clearInterval(heartbeat);
 });
 </script>
 

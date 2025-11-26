@@ -113,10 +113,6 @@ export function connectSocket(token) {
             scheduleReconnection();
         }
     });
-
-    // Heartbeat para manter conexão ativa
-    setupHeartbeat();
-
     return socket;
 }
 
@@ -146,24 +142,6 @@ function scheduleReconnection() {
     }, delay);
 }
 
-/**
- * Configura heartbeat para manter conexão ativa
- */
-function setupHeartbeat() {
-    if (!socket) return;
-
-    // Envia ping a cada 30 segundos
-    const heartbeatInterval = setInterval(() => {
-        if (socket?.connected) {
-            socket.emit('ping', { timestamp: Date.now() });
-        }
-    }, 30000);
-
-    // Limpa intervalo quando socket desconecta
-    socket.on('disconnect', () => {
-        clearInterval(heartbeatInterval);
-    });
-}
 
 /**
  * Retorna a instância atual do socket, se existir.
