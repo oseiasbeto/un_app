@@ -39,6 +39,27 @@ const reloadApp = () => {
   window.location.reload();
 }
 
+const forceUserOfflineImmediate = (userId) => {
+  const beaconSent = navigator.sendBeacon(
+    `https://api.1kole.com/v1/users/force-offline/${userId}`
+  );
+
+  logger.log(`📡 Beacon enviado: ${beaconSent}`)
+
+  // Método 2: Fetch com timeout muito curto
+  if (!beaconSent) {
+    fetch(`https://api.1kole.com/v1/users/force-offline/${userId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      keepalive: true, // Permite sobreviver ao fechamento
+      signal: AbortSignal.timeout(500) // Timeout de apenas 500ms!
+    }).catch(() => {
+      // Ignora erros - o importante é tentar
+      logger.log('Fallback fetch tentado');
+    });
+  }
+}
+
 // Função para tocar o som (com fallback silencioso)
 const playNotificationSound = async () => {
   try {
@@ -56,12 +77,20 @@ const playNotificationSound = async () => {
 
 // Função quando o usuário fica offline
 const handleOffline = async () => {
+  logger.log('WiFi desligada - desconectando...')
   isOnline.value = false;
-  // Tentar enviar disconnect antes de perder totalmente a conexão
+
   try {
-    await disconnectSocket();
+    await Promise.race([
+      disconnectSocket(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 1000))
+    ]);
+    logger.log('✅ Socket desconectado com sucesso');
   } catch (error) {
-    logger.log('Não foi possível enviar disconnect:', error)
+    logger.log('⚠️ Socket não conseguiu desconectar, usando fallback...');
+
+    // Estratégia 2: Beacon API - funciona mesmo sem conexão
+    forceUserOfflineImmediate(user.value?._id);
   }
 }
 

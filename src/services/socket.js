@@ -184,7 +184,7 @@ export function isSocketConnected() {
 /**
  * Desconecta do WebSocket.
  */
-export async function disconnectSocket() {
+export function disconnectSocket() {
     if (socket) {
         logger.log('Desconectando socket...');
         isManualDisconnect = true;
@@ -196,7 +196,7 @@ export async function disconnectSocket() {
         }
 
         cleanupVisibilityHandlers();
-        await socket.disconnect();
+        socket.disconnect();
         socket = null;
         authToken = null;
         reconnectAttempts = 0;
