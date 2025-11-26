@@ -58,7 +58,7 @@ export default {
                         )
                 );
 
-                module.items.unshift(...uniqueItems.reverse())
+                module.items.unshift(...uniqueItems)
                 module.pagination = newModule.pagination
             }
         },

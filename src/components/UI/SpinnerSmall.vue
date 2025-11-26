@@ -4,13 +4,13 @@
 
 <style scoped>
 .loader {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   border-bottom-color: transparent;
   border-radius: 50%;
   display: inline-block;
   box-sizing: border-box;
-  animation: rotation 1s linear infinite;
+  animation: rotation 0.3s linear infinite;
 }
 
 @keyframes rotation {

@@ -11,8 +11,8 @@
 
 <style scoped>
 .loader {
-  width: 45px;
-  height: 45px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   position: relative;
   animation: rotate 1s linear infinite
