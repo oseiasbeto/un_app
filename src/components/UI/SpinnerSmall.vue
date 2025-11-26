@@ -1,5 +1,5 @@
 <template>
-  <div class="loader border-[3px] border-text-primary/80"></div>
+  <div class="loader border-[2px] border-text-primary/80"></div>
 </template>
 
 <style scoped>
@@ -10,7 +10,7 @@
   border-radius: 50%;
   display: inline-block;
   box-sizing: border-box;
-  animation: rotation 0.3s linear infinite;
+  animation: rotation 0.5s linear infinite;
 }
 
 @keyframes rotation {

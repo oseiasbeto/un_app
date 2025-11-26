@@ -11,11 +11,11 @@
 
 <style scoped>
 .loader {
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   position: relative;
-  animation: rotate 1s linear infinite
+  animation: rotate 0.8s linear infinite
 }
 
 .loader::before {
@@ -24,7 +24,7 @@
   position: absolute;
   inset: 0px;
   border-radius: 50%;
-  border: 5px solid rgb(var(--color-primary));
+  border: 3px solid rgb(var(--color-primary));
   animation: prixClipFix 2s linear infinite;
 }
 

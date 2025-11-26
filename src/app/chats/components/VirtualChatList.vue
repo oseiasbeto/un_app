@@ -7,7 +7,7 @@
         <slot name="before-content"></slot>
         <!-- Loading -->
         <div v-if="loading">
-          <ChatSkeleton v-for="n in 5" :key="n" />
+          <ChatSkeleton v-for="n in 8" :key="n" />
         </div>
       </template>
 
@@ -29,7 +29,7 @@
 
 
     <!-- BOTÃO FLUTUANTE DO TELEGRAM -->
-    <FloatingActionButton @new-chat="$emit('new-chat')">
+    <FloatingActionButton v-show="!loading" @new-chat="$emit('new-chat')">
       <template #icon>
         <svg fill="none" viewBox="0 0 24 24" width="24" height="24">
           <path fill="#FFFFFF" fill-rule="evenodd" clip-rule="evenodd"

@@ -7,7 +7,7 @@
             <template #before>
                 <slot name="before-content"></slot>
                 <div v-if="loading" class="px-4 py-3 space-y-3">
-                    <UserSkeleton v-for="n in 5" :key="n" />
+                    <UserSkeleton v-for="n in 8" :key="n" />
                 </div>
             </template>
 
