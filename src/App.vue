@@ -31,8 +31,11 @@ const isAuthenticated = computed(() => {
 })
 
 const notificationSound = new Audio('/sounds/boop.mp3');
-
 notificationSound.preload = 'auto'
+
+const reloadApp = () => {
+  window.location.reload();
+}
 
 // Função para tocar o som (com fallback silencioso)
 const playNotificationSound = async () => {
@@ -56,9 +59,7 @@ const handleOffline = () => {
 
 // Função quando o usuário volta online
 const handleOnline = () => {
-  isOnline.value = true;
-  // Conecta ao WebSocket e informa ao backend que o usuário está online.
-  connectSocket(accessToken.value)
+  reloadApp()
 }
 
 // Configurar listeners de conexão
@@ -101,7 +102,7 @@ onMounted(async () => {
     await store.dispatch('refreshToken', sessionId)
       .then(() => {
         const socket = getSocket();
-        
+
         if (socket) {
           socket.on('newMessage', async (msg) => {
             const myId = user.value?._id;

@@ -33,7 +33,7 @@
         
 
         <!-- Horário da última mensagem -->
-        <span :class="['text-[13px] flex-shrink-0',
+        <span :class="['text-[13.5px] mt-0.5 flex-shrink-0',
           conversation.unread_count ? 'text-text-primary' : 'text-text-secondary']">
           {{ formatMessageTime(conversation?.last_message?.created_at, new Date(currentTime)) }}
         </span>
