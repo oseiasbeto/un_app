@@ -10,38 +10,26 @@ const SOCKET_URL = node_env == 'dev' ?
 let socket;
 let reconnectAttempts = 0;
 const MAX_RECONNECT_ATTEMPTS = 5;
-const RECONNECT_INTERVAL = 2000; // 2 segundos
+const RECONNECT_INTERVAL = 2000;
 let reconnectTimeoutId = null;
 let isManualDisconnect = false;
 let authToken = null;
 
-// Configuração de detectores de visibilidade
+// Configuração simples de background - 5 MINUTOS
+let backgroundStartTime = null;
+const BACKGROUND_RELOAD_TIME = 2 * 60 * 1000; // 5 minutos
+
+// Configuração de detectores de visibilidade para WebView
 const setupVisibilityHandlers = () => {
     if (typeof document !== 'undefined') {
+        // Evento padrão do navegador - funciona em WebView
         document.addEventListener('visibilitychange', handleVisibilityChange);
-    }
-
-    // Para ambiente mobile (cordova/capacitor)
-    if (typeof window !== 'undefined') {
-        window.addEventListener('focus', handleAppForeground);
-        window.addEventListener('blur', handleAppBackground);
-
-        // Para eventos de resume/pause em apps nativos
-        document.addEventListener('resume', handleAppForeground);
-        document.addEventListener('pause', handleAppBackground);
     }
 };
 
 const cleanupVisibilityHandlers = () => {
     if (typeof document !== 'undefined') {
         document.removeEventListener('visibilitychange', handleVisibilityChange);
-        document.removeEventListener('resume', handleAppForeground);
-        document.removeEventListener('pause', handleAppBackground);
-    }
-
-    if (typeof window !== 'undefined') {
-        window.removeEventListener('focus', handleAppForeground);
-        window.removeEventListener('blur', handleAppBackground);
     }
 };
 
@@ -54,23 +42,26 @@ const handleVisibilityChange = () => {
 };
 
 const handleAppForeground = () => {
-    console.log('App em primeiro plano - verificando conexão WebSocket');
-    if (!socket?.connected && authToken && !isManualDisconnect) {
-        console.log('Reconectando WebSocket ao voltar ao foreground');
-        connectSocket(authToken);
-    } else {
-        console.log('WebSocket já conectado:', socket.id);
+    const backgroundTime = backgroundStartTime ? Date.now() - backgroundStartTime : 0;
+    console.log(`App voltou ao foreground - Tempo em background: ${Math.round(backgroundTime/1000)}s`);
+    
+    backgroundStartTime = null;
+    
+    // Se ficou mais de 5min em background, recarrega a página
+    if (backgroundTime > BACKGROUND_RELOAD_TIME) {
+        console.log(`Ficou mais de 5min em background - Recarregando página...`);
+        window.location.reload();
+        return;
     }
 };
 
 const handleAppBackground = () => {
-    console.log('App em background - mantendo conexão WebSocket');
-    // Não desconectamos automaticamente em background
-    // Apenas monitoramos a conexão
+    console.log('App em background - monitorando...');
+    backgroundStartTime = Date.now();
 };
 
 /**
- * Conecta ao WebSocket do servidor com reconexão automática
+ * Conecta ao WebSocket do servidor
  * @param {string} token - Token de autenticação do usuário.
  * @returns {Socket} - Instância do socket.
  */
@@ -86,7 +77,7 @@ export function connectSocket(token) {
         return socket;
     }
 
-    console.log('Tentando conectar ao WebSocket com token:', token ? 'Token presente' : 'Token ausente');
+    console.log('Tentando conectar ao WebSocket');
 
     // Limpa tentativas anteriores de reconexão
     if (reconnectTimeoutId) {
@@ -96,15 +87,15 @@ export function connectSocket(token) {
 
     socket = io(SOCKET_URL, {
         auth: { token },
-        transports: ['websocket', 'polling'], // Melhor compatibilidade
-        timeout: 10000, // 10 segundos de timeout
-        forceNew: true, // Força nova conexão
-        reconnection: false, // Controlamos a reconexão manualmente
+        transports: ['websocket', 'polling'],
+        timeout: 10000,
+        forceNew: true,
+        reconnection: false,
     });
 
     socket.on('connect', () => {
         console.log('Conectado ao WebSocket:', socket.id);
-        reconnectAttempts = 0; // Reseta tentativas em conexão bem-sucedida
+        reconnectAttempts = 0;
         setupVisibilityHandlers();
     });
 
@@ -120,18 +111,6 @@ export function connectSocket(token) {
         if (!isManualDisconnect && reason !== 'io client disconnect') {
             scheduleReconnection();
         }
-    });
-
-    socket.on('reconnect_attempt', (attempt) => {
-        console.log(`Tentativa de reconexão ${attempt}`);
-    });
-
-    socket.on('reconnect_error', (error) => {
-        console.error('Erro na reconexão:', error.message);
-    });
-
-    socket.on('reconnect_failed', () => {
-        console.error('Falha em todas as tentativas de reconexão');
     });
 
     // Heartbeat para manter conexão ativa
@@ -154,7 +133,7 @@ function scheduleReconnection() {
     }
 
     reconnectAttempts++;
-    const delay = RECONNECT_INTERVAL * Math.pow(2, reconnectAttempts - 1); // Backoff exponencial
+    const delay = RECONNECT_INTERVAL * Math.pow(2, reconnectAttempts - 1);
 
     console.log(`Tentativa de reconexão ${reconnectAttempts} em ${delay}ms`);
 
@@ -220,6 +199,7 @@ export function disconnectSocket() {
         socket = null;
         authToken = null;
         reconnectAttempts = 0;
+        backgroundStartTime = null;
     }
 }
 

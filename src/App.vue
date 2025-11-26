@@ -5,7 +5,7 @@ import { useStore } from "vuex"
 import { computed, onMounted, ref, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import Cookies from "js-cookie";
-import { getSocket, connectSocket, forceReconnect, disconnectSocket } from '@/services/socket';
+import { getSocket, connectSocket, disconnectSocket } from '@/services/socket';
 import { getPlayerId } from "webtonative/OneSignal";
 import { statusBar } from "webtonative"
 
