@@ -16,6 +16,8 @@ const loading = ref(true)
 const store = useStore()
 const route = useRoute()
 const sessionId = Cookies.get("session_id")
+const savedTheme = ref(Cookies.get("theme") || 'dark')
+
 const isOnline = ref(true)
 
 const user = computed(() => {
@@ -55,6 +57,7 @@ const playNotificationSound = async () => {
 // Função quando o usuário fica offline
 const handleOffline = () => {
   isOnline.value = false;
+  disconnectSocket()
 }
 
 // Função quando o usuário volta online
@@ -74,9 +77,28 @@ const removeConnectionListeners = () => {
   window.removeEventListener('offline', handleOffline);
 }
 
+const setThemeColor = (theme) => {
+  if (savedTheme.value !== theme) {
+    Cookies.set('theme', theme)
+    savedTheme.value = theme
+  }
+
+  if (savedTheme.value === 'dark') {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+
+  statusBar({
+    style: 'light',
+    color: theme == 'dark' ? '151d28' : "fff",
+    overlay: false //Only for android
+  });
+}
+
 onMounted(async () => {
-  const savedTheme = 'dark';
-  if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  /* 
+  if (savedTheme.value === 'dark' || (!savedTheme.value && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     isDark.value = true;
     document.documentElement.classList.add('dark');
     statusBar({
@@ -92,7 +114,9 @@ onMounted(async () => {
       color: "fff",
       overlay: false //Only for android
     });
-  }
+  }*/
+
+  setThemeColor(savedTheme.value)
 
   // Configurar listeners de conexão
   setupConnectionListeners();
@@ -139,6 +163,9 @@ onMounted(async () => {
           return false;
         }
 
+        // setar com base no valor do corrente usuario
+        setThemeColor('dark')
+
         getPlayerId().then(async function (playerId) {
           if (playerId) {
             if (!user.value?.player_id_onesignal || user.value?.player_id_onesignal !== playerId) {
@@ -155,6 +182,11 @@ onMounted(async () => {
   } else {
     loading.value = false
   }
+
+
+  setTimeout(() => {
+    setThemeColor(savedTheme.value)
+  }, 2000);
 })
 
 onUnmounted(() => {
