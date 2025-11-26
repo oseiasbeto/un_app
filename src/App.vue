@@ -55,9 +55,14 @@ const playNotificationSound = async () => {
 }
 
 // Função quando o usuário fica offline
-const handleOffline = () => {
+const handleOffline = async () => {
   isOnline.value = false;
-  disconnectSocket()
+  // Tentar enviar disconnect antes de perder totalmente a conexão
+  try {
+    await disconnectSocket();
+  } catch (error) {
+    logger.log('Não foi possível enviar disconnect:', error)
+  }
 }
 
 // Função quando o usuário volta online

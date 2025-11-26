@@ -184,7 +184,7 @@ export function isSocketConnected() {
 /**
  * Desconecta do WebSocket.
  */
-export function disconnectSocket() {
+export async function disconnectSocket() {
     if (socket) {
         logger.log('Desconectando socket...');
         isManualDisconnect = true;
@@ -196,7 +196,7 @@ export function disconnectSocket() {
         }
 
         cleanupVisibilityHandlers();
-        socket.disconnect();
+        await socket.disconnect();
         socket = null;
         authToken = null;
         reconnectAttempts = 0;
@@ -204,17 +204,6 @@ export function disconnectSocket() {
     }
 }
 
-/**
- * Força uma reconexão imediata
- */
-export function forceReconnect() {
-    if (authToken) {
-        logger.log('Forçando reconexão...');
-        disconnectSocket();
-        isManualDisconnect = false;
-        setTimeout(() => connectSocket(authToken), 100);
-    }
-}
 
 // Inicializa handlers de visibilidade quando o módulo é carregado
 if (typeof document !== 'undefined') {
