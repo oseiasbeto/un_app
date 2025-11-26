@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import api from '../../api'
 
 export default {
@@ -22,9 +23,10 @@ export default {
                             (existingUser) => existingUser._id === user._id
                         )
                 );
-                console.log(items)
-                console.log(uniqueItems)
+                logger.log(items)
+                logger.log(uniqueItems)
 
+                
                 state.users.items = [
                     ...users,
                     ...uniqueItems
@@ -82,7 +84,7 @@ export default {
 
             } catch (err) {
                 // Log de erro
-                console.error("Failed to fetch users:", err);
+                logger.error("Failed to fetch users:", err);
                 throw err;
             }
         },
@@ -115,7 +117,7 @@ export default {
                 return items
             } catch (err) {
                 // Log de erro
-                console.error("Failed to search users:", err);
+                logger.error("Failed to search users:", err);
                 throw err;
             }
         },
@@ -126,7 +128,7 @@ export default {
                 return response
             } catch (err) {
                 // Log de erro
-                console.error("Failed to update user:", err);
+                logger.error("Failed to update user:", err);
                 throw err;
             }
         },

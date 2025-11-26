@@ -5,6 +5,7 @@ import setSessionIdFromCookies from "@/utils/set-session-id-from-cookies"; // Ar
 
 // Importa a função para conectar ao WebSocket (Socket.IO).
 import { connectSocket, disconnectSocket } from "@/services/socket";
+import { logger } from '@/utils/logger';
 
 export default {
     state: {
@@ -61,7 +62,7 @@ export default {
                 return response.data
             } catch (err) {
                 // IMPORTANTE: re-throw para o frontend receber no catch
-                console.error('Erro ao verificar código:', err.response?.data || err)
+                logger.error('Erro ao verificar código:', err.response?.data || err)
                 throw err  // <-- isso faz o .catch no componente funcionar
             }
         },
@@ -104,7 +105,7 @@ export default {
                 return response.data
             } catch (err) {
                 // IMPORTANTE: re-throw para o frontend receber no catch
-                console.error('Erro ao completar o perfil:', err.response?.data || err)
+                logger.error('Erro ao completar o perfil:', err.response?.data || err)
                 throw err  // <-- isso faz o .catch no componente funcionar
             }
         }

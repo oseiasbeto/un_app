@@ -2,6 +2,7 @@ import axios from 'axios'
 import { Promise } from 'core-js'
 import store from "@/store"
 import Cookies from "js-cookie"
+import { logger } from './utils/logger'
 
 const node_env = process.env.NODE_ENV === 'production' ? 'prod' : 'lan'
 
@@ -61,7 +62,7 @@ instance.interceptors.response.use(
 
             // Remove o refreshKey e redireciona para o login
             Cookies.remove("refresh_token_key")
-            console.warn('Token expirado. Redirecionando para o login...');
+            logger.error('Token expirado. Redirecionando para o login...');
             window.location.href = '/';
             return Promise.reject(error);
         }

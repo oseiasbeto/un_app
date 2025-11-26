@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import { io } from 'socket.io-client';
 
 const node_env = process.env.NODE_ENV === 'production' ? 'prod' : 'lan'
@@ -43,20 +44,20 @@ const handleVisibilityChange = () => {
 
 const handleAppForeground = () => {
     const backgroundTime = backgroundStartTime ? Date.now() - backgroundStartTime : 0;
-    console.log(`App voltou ao foreground - Tempo em background: ${Math.round(backgroundTime/1000)}s`);
+    logger.log(`App voltou ao foreground - Tempo em background: ${Math.round(backgroundTime/1000)}s`);
     
     backgroundStartTime = null;
     
     // Se ficou mais de 5min em background, recarrega a página
     if (backgroundTime > BACKGROUND_RELOAD_TIME) {
-        console.log(`Ficou mais de 5min em background - Recarregando página...`);
+        logger.log(`Ficou mais de 5min em background - Recarregando página...`);
         window.location.reload();
         return;
     }
 };
 
 const handleAppBackground = () => {
-    console.log('App em background - monitorando...');
+    logger.log('App em background - monitorando...');
     backgroundStartTime = Date.now();
 };
 
@@ -73,11 +74,11 @@ export function connectSocket(token) {
     authToken = token;
 
     if (socket?.connected) {
-        console.log('WebSocket já conectado:', socket.id);
+        logger.log('WebSocket já conectado:', socket.id);
         return socket;
     }
 
-    console.log('Tentando conectar ao WebSocket');
+    logger.log('Tentando conectar ao WebSocket');
 
     // Limpa tentativas anteriores de reconexão
     if (reconnectTimeoutId) {
@@ -94,18 +95,18 @@ export function connectSocket(token) {
     });
 
     socket.on('connect', () => {
-        console.log('Conectado ao WebSocket:', socket.id);
+        logger.log('Conectado ao WebSocket:', socket.id);
         reconnectAttempts = 0;
         setupVisibilityHandlers();
     });
 
     socket.on('connect_error', (error) => {
-        console.error('Erro na conexão WebSocket:', error.message);
+        logger.error('Erro na conexão WebSocket:', error.message);
         scheduleReconnection();
     });
 
     socket.on('disconnect', (reason) => {
-        console.log('Desconectado do WebSocket. Razão:', reason);
+        logger.log('Desconectado do WebSocket. Razão:', reason);
 
         // Se não foi uma desconexão manual, tenta reconectar
         if (!isManualDisconnect && reason !== 'io client disconnect') {
@@ -128,18 +129,18 @@ function scheduleReconnection() {
     }
 
     if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
-        console.error('Número máximo de tentativas de reconexão atingido');
+        logger.error('Número máximo de tentativas de reconexão atingido');
         return;
     }
 
     reconnectAttempts++;
     const delay = RECONNECT_INTERVAL * Math.pow(2, reconnectAttempts - 1);
 
-    console.log(`Tentativa de reconexão ${reconnectAttempts} em ${delay}ms`);
+    logger.log(`Tentativa de reconexão ${reconnectAttempts} em ${delay}ms`);
 
     reconnectTimeoutId = setTimeout(() => {
         if (!isManualDisconnect && authToken) {
-            console.log('Executando reconexão...');
+            logger.log('Executando reconexão...');
             connectSocket(authToken);
         }
     }, delay);
@@ -185,7 +186,7 @@ export function isSocketConnected() {
  */
 export function disconnectSocket() {
     if (socket) {
-        console.log('Desconectando socket...');
+        logger.log('Desconectando socket...');
         isManualDisconnect = true;
 
         // Limpa timeouts e handlers
@@ -208,7 +209,7 @@ export function disconnectSocket() {
  */
 export function forceReconnect() {
     if (authToken) {
-        console.log('Forçando reconexão...');
+        logger.log('Forçando reconexão...');
         disconnectSocket();
         isManualDisconnect = false;
         setTimeout(() => connectSocket(authToken), 100);

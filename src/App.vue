@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { getSocket, connectSocket, disconnectSocket } from '@/services/socket';
 import { getPlayerId } from "webtonative/OneSignal";
 import { statusBar } from "webtonative"
+import { logger } from "./utils/logger";
 
 // Estado para o tema
 const isDark = ref(false);
@@ -41,10 +42,10 @@ const playNotificationSound = async () => {
     await notificationSound.play();
 
   } catch (err) {
-    console.log(err)
+    logger.log(err)
     // Usuário não interagiu ainda com a página → navegador bloqueia som
     // Isso é normal no Chrome/Firefox. Só toca após primeira interação.
-    console.log("Som bloqueado (sem interação do usuário ainda)");
+    logger.log("Som bloqueado (sem interação do usuário ainda)");
   }
 }
 
@@ -133,7 +134,7 @@ onMounted(async () => {
             }
           })
         } else {
-          console.log('Nenhum socket encontrado');
+          logger.log('Nenhum socket encontrado');
           return false;
         }
 

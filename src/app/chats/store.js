@@ -1,3 +1,4 @@
+import { logger } from '@/utils/logger';
 import api from '../../api'
 
 export default {
@@ -252,7 +253,7 @@ export default {
                 commit("LOAD_CONVERSATIONS", { items, loadMore, pagination });
             } catch (err) {
                 // Log de erro
-                console.error("Failed to fetch conversations:", err);
+                logger.error("Failed to fetch conversations:", err);
                 throw err;
             }
         },
@@ -290,7 +291,7 @@ export default {
                 commit("LOAD_MESSAGES", newModule)
             } catch (err) {
                 // Log de erro
-                console.error("Failed to fetch messages:", err);
+                logger.error("Failed to fetch messages:", err);
                 throw err;
             }
         },
@@ -316,7 +317,7 @@ export default {
                     })
                 }
             } catch (err) {
-                console.error("Failed to send message:", err);
+                logger.error("Failed to send message:", err);
                 throw err;
             }
         },
@@ -330,7 +331,7 @@ export default {
 
                 return conversation
             } catch (err) {
-                console.error("Failed to open direct message:", err);
+                logger.error("Failed to open direct message:", err);
                 throw err;
             }
         },
@@ -343,7 +344,7 @@ export default {
 
                 return conversation
             } catch (err) {
-                console.error("Failed to get conversation by id:", err);
+                logger.error("Failed to get conversation by id:", err);
                 throw err;
             }
         },
