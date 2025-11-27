@@ -27,6 +27,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
 import VirtualChatList from '../components/VirtualChatList.vue';
 import { useRouter } from 'vue-router';
+import { getSocket } from '@/services/socket';
 
 
 // Estado de carregamento para mais conversas
@@ -36,6 +37,8 @@ const loadingConversations = ref(true)
 // Acesso ao store Vuex
 const store = useStore()
 const router = useRouter()
+
+const socket = getSocket()
 
 const user = computed(() => store.getters.currentUser)
 
@@ -80,8 +83,9 @@ onMounted(async () => {
     await store.dispatch("loadConversations", ({
         page: 1,
         limit: 10
-    })).finally(() => {
-        loadingConversations.value = false
-    })
+    }))
+        .finally(() => {
+            loadingConversations.value = false
+        })
 });
 </script>

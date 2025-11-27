@@ -1,14 +1,12 @@
 <template>
-  <div
-    class="w-full bg-background-primary">
+  <div class="w-full bg-background-primary">
     <form @submit.prevent="send" class="px-4 py-2 pb-1 flex items-center gap-3">
 
       <!-- Textarea compacto e lindo -->
       <div class="flex-1">
         <textarea ref="textareaRef" v-model="inputMessage" @input="autoResize"
           @keydown.enter.exact.prevent="handleEnter" @keydown.enter.shift.exact="allowNewLine" @focus="emit('focus')"
-          rows="1" placeholder="Mensagem" 
-          class="w-full resize-none overflow-hidden scroll-pt-4
+          rows="1" placeholder="Mensagem" class="w-full resize-none overflow-hidden scroll-pt-4
                  px-4 py-2 bg-background-secondary 
                 text-base leading-snug
                  placeholder-light-text-secondary/70 rounded-[23px] dark:placeholder-dark-text-secondary/70
@@ -37,16 +35,21 @@
 </template>
 
 <script setup>
-import { ref, computed, nextTick, watch, onMounted } from 'vue'
+import { logger } from '@/utils/logger'
+import { ref, computed, nextTick, watch, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps({
   disabled: { type: Boolean, default: false }
 })
 
-const emit = defineEmits(['message-sent', 'auto-resize', 'focus'])
+const emit = defineEmits(['message-sent', 'typing-start', 'typing-stop', 'auto-resize', 'focus'])
 
 const inputMessage = ref('')
 const textareaRef = ref(null)
+const isTyping = ref(false)
+let typingTimer = null
+let startTypingDebounce = null // ← Novo timer para o debounce do start
+
 const hasContent = computed(() => inputMessage.value.trim().length > 0)
 
 // ALTURA MÁXIMA = 4 LINHAS (≈ 98px com line-height 1.4 + padding)
@@ -67,6 +70,42 @@ const autoResize = () => {
   } else {
     el.style.height = `${MAX_HEIGHT}px`
     el.style.overflowY = 'auto'
+  }
+
+  // DEBOUNCE para iniciar digitação - espera 300ms antes de emitir
+  clearTimeout(startTypingDebounce)
+  startTypingDebounce = setTimeout(() => {
+    // Se tem conteúdo E não está atualmente digitando → inicia digitação
+    if (inputMessage.value.trim() && !isTyping.value) {
+      isTyping.value = true
+      emit('typing-start')
+      logger.log('Iniciando digitação...')
+    }
+  }, 300) // ⏰ Espera 300ms de inatividade antes de emitir typing-start
+
+  // SEMPRE reseta o timer quando digita (isso evita parar após 1 minuto)
+  clearTimeout(typingTimer)
+  typingTimer = setTimeout(() => {
+    // Só para de digitar se estiver atualmente no estado de digitação
+    if (isTyping.value) {
+      isTyping.value = false
+      emit('typing-stop')
+      logger.log('Parando digitação (timeout)')
+    }
+    typingTimer = null
+  }, 1000) // 1 segundo sem digitar
+}
+
+const stopTyping = () => {
+  // Só emite stop se estiver digitando
+  if (isTyping.value) {
+    isTyping.value = false
+    emit('typing-stop')
+  }
+
+  if (typingTimer) {
+    clearTimeout(typingTimer)
+    typingTimer = null
   }
 }
 
@@ -90,11 +129,13 @@ const send = async () => {
   await nextTick()
   autoResize()
   textareaRef.value?.focus()
+  stopTyping() // Para de digitar ao enviar
 }
 
 const clearInput = () => {
   inputMessage.value = ''
   nextTick(autoResize)
+  stopTyping()
 }
 
 
@@ -107,4 +148,9 @@ defineExpose({
 
 watch(inputMessage, () => nextTick(autoResize))
 onMounted(() => nextTick(autoResize))
+onUnmounted(() => {
+  if (typingTimer) {
+    clearTimeout(typingTimer)
+  }
+})
 </script>

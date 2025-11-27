@@ -8,7 +8,7 @@
       <Avatar :url="conversation?.avatar || '/default-avatar.png'" size="lg" alt="" />
 
       <!-- Bolinha verde de online (só em conversas diretas) -->
-       <div v-if="conversation.type === 'direct' && conversation.is_online"
+      <div v-if="conversation.type === 'direct' && conversation.is_online"
         class="absolute bottom-0 right-0 w-4 h-4 bg-green-400 rounded-full border-2 border-background-primary">
       </div>
     </div>
@@ -24,13 +24,13 @@
         <!--celo de verificacao-->
         <div v-if="conversation?.is_verified" class="shrink-0 flex-1 justify-start">
           <svg class="ml-[-4px]" fill="none" width="14" viewBox="0 0 24 24" height="14">
-          <circle cx="12" cy="12" r="11.5" fill="#0F73FF"></circle>
-          <path fill="#fff" fill-rule="evenodd" clip-rule="evenodd"
-            d="M17.659 8.175a1.361 1.361 0 0 1 0 1.925l-6.224 6.223a1.361 1.361 0 0 1-1.925 0L6.4 13.212a1.361 1.361 0 0 1 1.925-1.925l2.149 2.148 5.26-5.26a1.361 1.361 0 0 1 1.925 0Z">
-          </path>
-        </svg>
+            <circle cx="12" cy="12" r="11.5" fill="#0F73FF"></circle>
+            <path fill="#fff" fill-rule="evenodd" clip-rule="evenodd"
+              d="M17.659 8.175a1.361 1.361 0 0 1 0 1.925l-6.224 6.223a1.361 1.361 0 0 1-1.925 0L6.4 13.212a1.361 1.361 0 0 1 1.925-1.925l2.149 2.148 5.26-5.26a1.361 1.361 0 0 1 1.925 0Z">
+            </path>
+          </svg>
         </div>
-        
+
 
         <!-- Horário da última mensagem -->
         <span :class="['text-[13px] flex-shrink-0',
@@ -41,16 +41,20 @@
 
       <div class="flex items-center justify-between gap-3">
         <!-- Última mensagem + ícone de check se for enviada por você -->
-        <p class="text-[13.5px] mt-0.5 truncate max-w-[220px]"
-          :class="`${conversation.unread_count ? 'text-text-primary' : 'text-text-secondary'}`">
+        <p v-if="conversation?.is_typing" class="text-[13.5px] mt-[2.5px] text-green-400 truncate max-w-[220px]">
+          Escrevendo...
+        </p>
+        <!-- Última mensagem + ícone de check se for enviada por você -->
+        <p v-else-if="conversation?.last_message?.content" class="text-[13.5px] mt-[2.5px] truncate max-w-[220px]"
+          :class="[conversation.unread_count ? 'text-text-primary' : 'text-text-secondary']">
 
-          {{ conversation.last_message?.content || 'Nova conversa' }}
+          {{ conversation.last_message?.content }}
         </p>
 
         <!-- Badge de não lidas (igual Telegram) -->
         <div v-if="conversation?.unread_count" class="flex-shrink-0">
           <span
-            class="flex items-center justify-center min-w-5 h-5 px-1.5 text-xs font-bold text-white bg-primary rounded-full shadow-sm">
+            class="flex items-center justify-center min-w-5 h-5 px-1.5 text-[11px] font-semibold mt-0.5 text-white bg-primary rounded-full shadow-sm">
             {{ conversation.unread_count > 99 ? '99+' : conversation.unread_count }}
           </span>
         </div>
@@ -68,7 +72,7 @@
 
 <script setup>
 import Avatar from '@/components/Utils/Avatar.vue'
-import { formatMessageTime  } from '@/utils/format-message-time'
+import { formatMessageTime } from '@/utils/format-message-time'
 import { onMounted, onUnmounted, ref } from 'vue'
 
 defineProps({

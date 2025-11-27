@@ -44,6 +44,7 @@ export default {
                     phone_number: phoneNumber
                 })
             } catch (err) {
+                logger.error("Erro ao enviar o OTP: " + err)
                 throw err
             }
         },
@@ -87,7 +88,7 @@ export default {
                     clearSessionIdFromCookies();
                     disconnectSocket();
                 }
-                console.log(err.message);
+                logger.error(err.message);
                 throw err;
             }
         },

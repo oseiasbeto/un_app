@@ -18,9 +18,10 @@
         </div>
 
         <div class="h-[51px]"></div>
-        
-        <VirtualUsers :ukey="ukey" :users="users.items || []" :loading="loadingLoadUsers" :loading-more="loadingMoreUsers"
-            :has-more="users?.pagination?.hasMore" @load-more="loadMoreUsers" @select="select"/>
+
+        <VirtualUsers :ukey="ukey" :users="users.items || []" :loading="loadingLoadUsers"
+            :loading-more="loadingMoreUsers" :has-more="users?.pagination?.hasMore" @load-more="loadMoreUsers"
+            @select="select" />
     </div>
 </template>
 
@@ -32,6 +33,7 @@ import { useRouter } from 'vue-router';
 import { debounce } from 'lodash-es'
 import Navbar from '@/components/UI/Navbar.vue';
 import SearchForm from '@/app/users/components/SearchForm.vue';
+import { getSocket } from '@/services/socket';
 
 const loadingLoadUsers = ref(true)
 const loadingMoreUsers = ref(false)
@@ -43,6 +45,8 @@ const ukey = ref("")
 const store = useStore()
 const router = useRouter()
 
+const socket = getSocket()
+
 const users = computed(() => store.getters.users)
 
 const select = async (user) => {
@@ -50,6 +54,7 @@ const select = async (user) => {
 
     loadingOpenConv.value = true
     await store.dispatch('openDirectMessage', user._id).then((conv) => {
+        socket.emit('join_conversation', conv?._id)
         router.push('/messages/' + conv?._id)
     }).finally(() => {
         loadingOpenConv.value = false

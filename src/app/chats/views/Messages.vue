@@ -10,14 +10,10 @@
 
             <div v-if="!loadingMessages">
                 <div class="flex justify-center" ref="loadTrigger" v-if="cachedMessages?.pagination?.hasMore">
-                     <SpinnerSmall />
+                    <SpinnerSmall />
                 </div>
-                <MessageBox v-for="(message, index) in cachedMessages?.items || []" 
-                :key="message._id" 
-                :message="message"
-                :user-id="user?._id" 
-                :previousMessage="cachedMessages?.items[index - 1]"
-                />
+                <MessageBox v-for="(message, index) in cachedMessages?.items || []" :key="message._id"
+                    :message="message" :user-id="user?._id" :previousMessage="cachedMessages?.items[index - 1]" />
             </div>
             <div class="h-full flex justify-center items-center w-full" v-else>
                 <SpinnerSmall />
@@ -25,9 +21,9 @@
         </div>
 
 
-        <div class="z-[100]  dark:bg-dark-bg w-full">
-            <MessageForm @auto-resize="scrollToBottom" ref="messageForm"
-                :disabled="isLoadingSendMessage" @message-sent="handleSendMessage" />
+        <div class="z-[100] dark:bg-dark-bg w-full">
+            <MessageForm @typing-start="handleTypingStart" @typing-stop="handleTypingStop" @auto-resize="scrollToBottom"
+                ref="messageForm" :disabled="isLoadingSendMessage" @message-sent="handleSendMessage" />
         </div>
     </div>
 </template>
@@ -166,6 +162,15 @@ const updateInputHeight = () => {
     inputHeight.value = rect.height;
 };
 
+// Funções para controlar a digitação
+const handleTypingStart = () => {
+    socket.emit('typing_start', conversation.value?._id)
+}
+
+const handleTypingStop = () => {
+    socket.emit('typing_stop', conversation.value?._id)
+}
+
 // Observa o último elemento da lista
 let isLoadingMore = false
 
@@ -281,7 +286,7 @@ onMounted(async () => {
     scrollToBottom(false);
 
     if (socket) {
-        socket.on('newMessage', async (msg) => {
+        socket.on('new_message', async (msg) => {
             if (msg.conversation?._id === conversation.value._id) {
                 await scrollToBottom();
             }
@@ -291,6 +296,8 @@ onMounted(async () => {
 
 onUnmounted(() => {
     // SEMPRE remove o listener ao sair do componente
+    socket.off('typing_start')
+    socket.off('typing_stop')
     socket.off('newMessage');
     window.visualViewport?.removeEventListener('resize', viewportHandler);
     //window.visualViewport?.removeEventListener('scroll', viewportHandler);

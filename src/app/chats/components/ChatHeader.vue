@@ -33,19 +33,19 @@
 
 
       <!-- Status (online / digitando / visto por último) -->
-      <p class="text-[11.3px] text-text-secondary flex items-center gap-1.5 leading-none">
+      <p class="text-xs mt-0.5 text-text-secondary flex items-center gap-1.5 leading-none">
         <!-- Carregando -->
         <span v-if="loading">conectando...</span>
 
         <!-- Online com bolinha verde piscando (igual Telegram) -->
-        <span v-else-if="conversation?.is_online" class="flex items-center gap-1.5">
+        <span v-else-if="conversation?.is_online && !conversation?.is_typing" class="flex items-center gap-1.5">
           online
         </span>
 
         <!-- Digitando com animação de 3 pontinhos -->
-        <span v-else-if="conversation?.typing" class="flex items-center gap-0.5">
-          digitando
-          <span class="flex space-x-0.5">
+        <span v-else-if="conversation?.is_typing" class="flex items-center gap-0.5">
+          escrevendo
+          <span class="flex ml-1 space-x-0.5">
             <span class="w-1 h-1 bg-current rounded-full animate-bounce [animation-delay:-0.3s]"></span>
             <span class="w-1 h-1 bg-current rounded-full animate-bounce [animation-delay:-0.15s]"></span>
             <span class="w-1 h-1 bg-current rounded-full animate-bounce"></span>

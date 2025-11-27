@@ -138,11 +138,16 @@ onMounted(async () => {
         const socket = getSocket();
 
         if (socket) {
-          socket.on('newMessage', async (msg) => {
+          heartbeat = setInterval(() => {
+            if (socket?.connected) {
+              socket.emit('heartbeat'); // só isso!
+            }
+          }, 15_000); // a cada 15 segundos
+
+          socket.on('new_message', async (msg) => {
             const myId = user.value?._id;
             const isFromMe = msg.sender?._id === myId;
             const currentConvId = route.params?.convId || route.query?.convId;
-
 
             // Atualiza conversa na sidebar
             store.commit("ADD_OR_UPDATE_CONVERSATION", msg.conversation);
@@ -169,11 +174,23 @@ onMounted(async () => {
             }
           })
 
-          heartbeat = setInterval(() => {
-            if (socket?.connected) {
-              socket.emit('heartbeat'); // só isso!
+          socket.on("user_typing_start", ({ convId, userId }) => {
+            if (userId !== user.value?._id) {
+              store.commit("UPDATE_TYPING_ON_CONVERSATION", {
+                convId,
+                payload: true
+              })
             }
-          }, 15_000); // a cada 15 segundos
+          })
+
+          socket.on("user_typing_stop", ({ convId, userId }) => {
+            if (userId !== user.value?._id) {
+              store.commit("UPDATE_TYPING_ON_CONVERSATION", {
+                convId,
+                payload: false
+              })
+            }
+          })
         } else {
           logger.log('Nenhum socket encontrado');
           return false;

@@ -1,5 +1,8 @@
 import { logger } from '@/utils/logger';
 import api from '../../api'
+import { getSocket } from '@/services/socket';
+
+const socket = getSocket()
 
 export default {
     state: {
@@ -74,6 +77,24 @@ export default {
 
             if (index !== -1) {
                 conversations[index].unread_count = count
+            }
+        },
+
+        UPDATE_TYPING_ON_CONVERSATION(state, { convId, payload }) {
+            if (!convId) return
+            const conversations = state.conversations.items
+            const conv = state.conversation
+
+            if (!conversations.length) return
+
+            const index = conversations.findIndex(conv => conv._id === convId)
+
+            if (index !== -1) {
+                conversations[index].is_typing = payload
+            }
+
+            if (conv && conv._id === convId) {
+                conv.is_typing = payload
             }
         },
 
@@ -152,7 +173,7 @@ export default {
         ADD_OR_UPDATE_CONVERSATION(state, conversation) {
             const updatedConv = conversation; // pode estar incompleto!
             const items = state.conversations.items;
-            
+
 
             const index = items.findIndex(c => c._id === updatedConv._id);
 
@@ -340,6 +361,7 @@ export default {
             try {
                 const res = await api.get(`/conversations/${convId}`)
                 const { conversation } = res.data
+
                 commit('SET_CONVERSATION', conversation)
 
                 return conversation
