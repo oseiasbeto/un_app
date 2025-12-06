@@ -3,7 +3,7 @@
         class="shrink-0 fixed flex items-center top-0 w-full z-[100] px-5 h-[52px] border-b border-border-primary bg-background-primary">
         <div class="flex items-center justify-between">
             <div>
-                <h2 class=" text-2xl font-secondary font-bold text-text-primary">Mensagens</h2>
+                <h2 class=" text-[26px] font-secondary font-bold text-text-primary">Mensagens</h2>
             </div>
 
             <div>

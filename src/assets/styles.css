@@ -7,6 +7,15 @@ body {
   background-color: rgb(var(--color-bg-primary)) !important;
 }
 
+
+@font-face {
+    font-family: 'Segoe UI Emoji';
+    src: url('../assets/fonts/Segoe\ UI\ Gras.ttf') format('truetype');
+    font-weight: 600;
+    font-style: 700;
+    font-display: swap; /* Melhora performance de carregamento */
+}
+
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
