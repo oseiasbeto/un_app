@@ -1,8 +1,8 @@
 <template>
   <header
-    class="fixed top-0 left-0 right-0 z-50 flex h-[52px] items-center px-4 bg-background-primary border-b border-border-primary">
+    class="fixed top-0 left-0 right-0 z-50 flex h-[52px] items-center px-4 bg-background-primary">
     <button @click="$emit('goBack')"
-      class="p-1 text-text-secondary hover:bg-background-secondary mr-1 rounded-full transition-colors">
+      class="p-1 text-primary hover:bg-background-secondary mr-1 rounded-full transition-colors">
       <svg fill="none" width="24" viewBox="0 0 24 24" height="24">
         <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"
           d="M3 12a1 1 0 0 1 .293-.707l6-6a1 1 0 0 1 1.414 1.414L6.414 11H20a1 1 0 1 1 0 2H6.414l4.293 4.293a1 1 0 0 1-1.414 1.414l-6-6A1 1 0 0 1 3 12Z">
@@ -62,7 +62,7 @@
     <!-- Botões da direita (busca e menu) -->
     <div class="flex items-center gap-3">
       <!-- Mais opções (3 pontinhos verticais) -->
-      <button class="p-2 rounded-full text-text-secondary hover:bg-background-secondary transition-colors">
+      <button class="p-2 rounded-full text-primary hover:bg-background-secondary transition-colors">
         <svg fill="none" width="18" viewBox="0 0 24 24" height="18">
           <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"
             d="M2 12a2 2 0 1 1 4 0 2 2 0 0 1-4 0Zm16 0a2 2 0 1 1 4 0 2 2 0 0 1-4 0Zm-6-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z">

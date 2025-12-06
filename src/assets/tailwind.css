@@ -5,7 +5,7 @@
 @layer base {
   :root {
     /* Light Mode */
-    --color-primary: 15 115 255;   
+    --color-primary: 0 191 129;    /* #00bf81 */
     --color-secondary: 2 132 199;   
     --color-tertiary: 3 105 161;
     
@@ -31,15 +31,15 @@
     --color-secondary: 186 230 253; 
     --color-tertiary: 224 242 254; 
     
-    --color-bg-primary: 21 29 40;     
-    --color-bg-secondary: 34 46 63;     
+    --color-bg-primary: 0 0 0;     
+    --color-bg-secondary: 51 51 51;     
     --color-bg-tertiary: 28 39 56; 
     
-    --color-text-primary: 255 255 255;  /* #fff */
-    --color-text-secondary: 171 184 201; /* #abb8c9 */
-    --color-text-tertiary: 113 113 122; /* #71717a */
+    --color-text-primary: 255 255 255;  
+    --color-text-secondary: 178 179 184;
+    --color-text-tertiary: 119 119 119;
     
-    --color-border-primary: 44 58 78;   
+    --color-border-primary: 0 0 0;   
     
     /* Cores de estado - Dark */
     --color-success: 52 211 153;    /* #34d399 */

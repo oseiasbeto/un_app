@@ -10,31 +10,48 @@ import { getPlayerId } from "webtonative/OneSignal";
 import { statusBar } from "webtonative"
 import { logger } from "./utils/logger";
 
-// Estado para o tema
-const isDark = ref(false);
+// Estado de loading do app
 const loading = ref(true)
+
+// Vuex store
 const store = useStore()
+
+// Rota atual
 const route = useRoute()
+
+// Pega sessão salva em cookie
 const sessionId = Cookies.get("session_id")
+
+// Tema salvo em cookie
 const savedTheme = ref(Cookies.get("theme") || 'dark')
 
+// Ambiente (prod ou dev)
+const node_env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev'
+
+// Estado de conexão
 const isOnline = ref(true)
 
+// Pega dados do usuário
 const user = computed(() => {
   return store.getters.currentUser
 })
+
+// Pega token de acesso
 const accessToken = computed(() => {
   return store.getters.accessToken
 })
 
+// Verifica se está autenticado
 const isAuthenticated = computed(() => {
   if (accessToken.value) return true
   else return false
 })
 
+// Preparar som de notificação
 const notificationSound = new Audio('/sounds/boop.mp3');
 notificationSound.preload = 'auto'
 
+// Função para recarregar o app
 const reloadApp = () => {
   window.location.reload();
 }
@@ -60,6 +77,7 @@ const handleOffline = async () => {
   isOnline.value = false;
 
   try {
+    // Tenta desconectar o socket com timeout de 1 segundo
     await Promise.race([
       disconnectSocket(),
       new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 1000))
@@ -88,17 +106,22 @@ const removeConnectionListeners = () => {
 }
 
 const setThemeColor = (theme) => {
+  // Salvar preferência
   if (savedTheme.value !== theme) {
     Cookies.set('theme', theme)
     savedTheme.value = theme
   }
 
+  // Aplicar classe no HTML
   if (savedTheme.value === 'dark') {
+    // Aplicar tema escuro  
     document.documentElement.classList.add('dark');
   } else {
+    // Aplicar tema claro
     document.documentElement.classList.remove('dark');
   }
 
+  // Ajustar status bar
   statusBar({
     style: 'light',
     color: theme == 'dark' ? '151d28' : "fff",
@@ -126,15 +149,17 @@ onMounted(async () => {
     });
   }*/
 
+  // Aplicar tema salvo
   setThemeColor(savedTheme.value)
 
   // Configurar listeners de conexão
   setupConnectionListeners();
 
-
+  // Se tiver sessão salva, tentar restaurar
   if (sessionId && !isAuthenticated.value) {
     await store.dispatch('refreshToken', sessionId)
       .then(() => {
+        
         const socket = getSocket();
 
         if (socket) {
@@ -144,6 +169,7 @@ onMounted(async () => {
             }
           }, 15_000); // a cada 15 segundos
 
+          // Conectar socket
           socket.on('new_message', async (msg) => {
             const myId = user.value?._id;
             const isFromMe = msg.sender?._id === myId;
@@ -174,6 +200,7 @@ onMounted(async () => {
             }
           })
 
+          // Listeners de digitação
           socket.on("user_typing_start", ({ convId, userId }) => {
             if (userId !== user.value?._id) {
               store.commit("UPDATE_TYPING_ON_CONVERSATION", {
@@ -183,6 +210,7 @@ onMounted(async () => {
             }
           })
 
+          // Listener para quando o outro usuário parar de digitar
           socket.on("user_typing_stop", ({ convId, userId }) => {
             if (userId !== user.value?._id) {
               store.commit("UPDATE_TYPING_ON_CONVERSATION", {
@@ -199,15 +227,19 @@ onMounted(async () => {
         // setar com base no valor do corrente usuario
         setThemeColor('dark')
 
-        getPlayerId().then(async function (playerId) {
-          if (playerId) {
-            if (!user.value?.player_id_onesignal || user.value?.player_id_onesignal !== playerId) {
-              await store.dispatch("updateUser", {
-                playerIdOneSignal: playerId
-              })
+        // Registrar OneSignal Player ID  
+        if (node_env === 'prod') {
+          getPlayerId().then(async function (playerId) {
+            if (playerId) {
+              if (!user.value?.player_id_onesignal || user.value?.player_id_onesignal !== playerId) {
+                await store.dispatch("updateUser", {
+                  playerIdOneSignal: playerId
+                })
+              }
             }
-          }
-        });
+          });
+        }
+
       })
       .finally(() => {
         loading.value = false

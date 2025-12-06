@@ -54,7 +54,6 @@ const select = async (user) => {
 
     loadingOpenConv.value = true
     await store.dispatch('openDirectMessage', user._id).then((conv) => {
-        socket.emit('join_conversation', conv?._id)
         router.push('/messages/' + conv?._id)
     }).finally(() => {
         loadingOpenConv.value = false
