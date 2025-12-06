@@ -124,7 +124,7 @@ const setThemeColor = (theme) => {
   // Ajustar status bar
   statusBar({
     style: 'light',
-    color: theme == 'dark' ? '151d28' : "fff",
+    color: theme == 'dark' ? '000' : "fff",
     overlay: false //Only for android
   });
 }

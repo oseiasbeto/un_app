@@ -9,7 +9,7 @@
           rows="1" placeholder="Mensagem" class="w-full resize-none overflow-hidden scroll-pt-4
                  px-4 py-2 bg-background-secondary 
                 text-base leading-snug
-                 placeholder-light-text-secondary/70 rounded-[23px] dark:placeholder-dark-text-secondary/70
+                 placeholder-text-secondary rounded-[23px] dark:placeholder-dark-text-secondary/70
                 focus:outline-none
                  whitespace-pre-wrap break-words
                  min-h-[30px]" style="line-height: 20px;" />
@@ -21,7 +21,7 @@
         leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-90">
         <button v-if="hasContent" type="submit" :disabled="props.disabled" class="p-1.5 bg-primary disabled:opacity-50
                  text-white rounded-full flex-shrink-0
-                 transition-all duration-200 mb-0.5 active:scale-95">
+                 transition-all duration-200 mb-1 active:scale-95">
           <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24" id="send"
             class="icon glyph">
             <path

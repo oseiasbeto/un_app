@@ -3,7 +3,7 @@
         class="shrink-0 fixed flex items-center top-0 w-full z-[100] px-5 h-[52px] border-b border-border-primary bg-background-primary">
         <div class="flex items-center justify-between">
             <div>
-                <h2 class=" text-xl font-secondary font-bold text-text-primary">Mensagens</h2>
+                <h2 class=" text-2xl font-secondary font-bold text-text-primary">Mensagens</h2>
             </div>
 
             <div>
@@ -17,6 +17,11 @@
         <VirtualChatList :conversations="conversations?.items || []" :loading="loadingConversations"
             :loading-more="loadingMoreConversations" :user-id="user?._id" :has-more="conversations?.pagination?.hasMore"
             @select="select" @new-chat="router.push('/new-message')" @load-more="loadMoreConversations">
+            <template #before-content>
+                <div class="px-4 py-2">
+                     <SearchWrapper />
+                </div>
+            </template>
         </VirtualChatList>
     </div>
 
@@ -28,7 +33,7 @@ import { useStore } from 'vuex';
 import VirtualChatList from '../components/VirtualChatList.vue';
 import { useRouter } from 'vue-router';
 import { getSocket } from '@/services/socket';
-
+import SearchWrapper from '@/app/users/components/SearchWrapper.vue';
 
 // Estado de carregamento para mais conversas
 const loadingMoreConversations = ref(false);
