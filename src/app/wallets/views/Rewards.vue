@@ -7,11 +7,11 @@
 
 <script setup>
 
-const openRewardsAd = () => {
-    const {
-        rewardsAd,
-    } = WTN.AdMob;
+import {
+    rewardsAd,
+} from "webtonative/AdMob";
 
+const openRewardsAd = () => {
     rewardsAd({
         adId: "ca-app-pub-3940256099942544/5224354917",
         rewardsAdCallback: (value) => {
