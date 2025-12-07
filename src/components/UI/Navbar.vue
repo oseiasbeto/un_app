@@ -14,7 +14,7 @@
             </button>
 
             <!-- Título centralizado -->
-            <h1 class="text-xl ml-3 font-bold font-secondary text-white select-none">
+            <h1 class="text-xl ml-3 font-bold text-white select-none">
                 {{ title }}
             </h1>
         </div>

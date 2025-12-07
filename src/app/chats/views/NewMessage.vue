@@ -14,7 +14,7 @@
                 </template>
             </Navbar>
 
-            <SearchForm @search="handleSearch" @go-back="closeSearchForm" v-else />
+            <SearchUsersForm @search="handleSearch" @go-back="closeSearchForm" v-else />
         </div>
 
         <div class="h-[51px]"></div>
@@ -32,7 +32,7 @@ import VirtualUsers from '../../users/components/VirtualUsers.vue';
 import { useRouter } from 'vue-router';
 import { debounce } from 'lodash-es'
 import Navbar from '@/components/UI/Navbar.vue';
-import SearchForm from '@/app/users/components/SearchForm.vue';
+import SearchUsersForm from '@/app/search/components/SearchUsersForm.vue';
 import { getSocket } from '@/services/socket';
 
 const loadingLoadUsers = ref(true)

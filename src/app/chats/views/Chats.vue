@@ -19,7 +19,7 @@
             @select="select" @new-chat="router.push('/new-message')" @load-more="loadMoreConversations">
             <template #before-content>
                 <div class="px-4 py-2">
-                     <SearchWrapper />
+                     <SearchWrapper @on-press="router.push('/rewards')" placeholder="Pesquisar" />
                 </div>
             </template>
         </VirtualChatList>
@@ -33,7 +33,7 @@ import { useStore } from 'vuex';
 import VirtualChatList from '../components/VirtualChatList.vue';
 import { useRouter } from 'vue-router';
 import { getSocket } from '@/services/socket';
-import SearchWrapper from '@/app/users/components/SearchWrapper.vue';
+import SearchWrapper from '@/app/search/components/SearchWrapper.vue';
 
 // Estado de carregamento para mais conversas
 const loadingMoreConversations = ref(false);
