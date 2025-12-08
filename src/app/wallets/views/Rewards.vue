@@ -1,7 +1,9 @@
 <template>
     <h1>Recompensas</h1>
 
-    <button :disabled="loading" @click="openRewardsAd">Obter Recompensas</button>
+    <button :disabled="loading" @click="openRewardsAd">
+        {{ loading ? 'Aguarde o anuncio esta carregando...' : 'Obter Recompensas' }}
+    </button>
 </template>
 
 
@@ -19,7 +21,10 @@ const openRewardsAd = () => {
     loading.value = true
     rewardsAd({
         adId: "ca-app-pub-3940256099942544/5224354917",
-        rewardsAdCallback: (status) => {
+        rewardsAdCallback: (value) => {
+            
+            const status = value.status
+
             // Trata o status do anúncio de recompensas
             if(status === "success") {
                 loading.value = false
