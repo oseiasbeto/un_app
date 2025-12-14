@@ -5,25 +5,25 @@
 @layer base {
   :root {
     /* Light Mode */
-    --color-primary: 0 191 129;    /* #00bf81 */
+    --color-primary: 93 100 243; 
     --color-secondary: 2 132 199;   
     --color-tertiary: 3 105 161;
     
-    --color-bg-primary: 255 255 255;    /* #fafafa */
-    --color-bg-secondary: 255 255 255;  /* #ffffff */
-    --color-bg-tertiary: 244 244 245;   /* #f4f4f5 */
+    --color-bg-primary: 255 255 255;   
+    --color-bg-secondary: 255 255 255; 
+    --color-bg-tertiary: 244 244 245;   
     
-    --color-text-primary: 24 24 27;     /* #18181b */
-    --color-text-secondary: 82 82 91;   /* #52525b */
-    --color-text-tertiary: 161 161 170; /* #a1a1aa */
+    --color-text-primary: 24 24 27;    
+    --color-text-secondary: 82 82 91;  
+    --color-text-tertiary: 161 161 170; 
     
-    --color-border-primary: 228 228 231; /* #e4e4e7 */
+    --color-border-primary: 228 228 231; 
 
       /* Cores de estado - Light */
-    --color-success: 16 185 129;    /* #10b981 */
-    --color-warning: 245 158 11;    /* #f59e0b */
-    --color-danger: 239 68 68;      /* #ef4444 */
-    --color-info: 6 182 212;        /* #06b6d4 */
+    --color-success: 16 185 129;    
+    --color-warning: 245 158 11; 
+    --color-danger: 239 68 68;    
+    --color-info: 6 182 212; 
   }
 
   .dark {

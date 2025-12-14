@@ -15,7 +15,7 @@
     <div :class="[
       'rounded-2xl relative px-[14px] py-2 shadow-sm',
       isSent
-        ? 'bg-[#039f6c] text-white'
+        ? 'bg-primary text-white'
         : 'bg-background-secondary text-text-primary',
       // Efeito para mensagens com apenas emojis
       isEmojiOnly 

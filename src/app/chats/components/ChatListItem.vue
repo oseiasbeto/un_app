@@ -1,7 +1,7 @@
 <template>
   <div @click="$emit('click')" class="
       flex items-center px-4 py-3 gap-3 cursor-pointer transition-all duration-200 relative
-      hover:bg-background-tertiary
+      hover:bg-background-secondary
     ">
     <!-- Avatar com status online -->
     <div class="relative flex-shrink-0">

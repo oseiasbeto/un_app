@@ -171,30 +171,44 @@ onMounted(async () => {
 
           // Conectar socket
           socket.on('new_message', async (msg) => {
+
+            logger.log('Nova mensagem recebida via socket:', msg);
+
+            // Meu ID
             const myId = user.value?._id;
+
+            // Verifica se a mensagem é minha
             const isFromMe = msg.sender?._id === myId;
+
+            // ID da conversa atualmente aberta
             const currentConvId = route.params?.convId || route.query?.convId;
 
+
             // Atualiza conversa na sidebar
-            store.commit("ADD_OR_UPDATE_CONVERSATION", msg.conversation);
+            store.commit("ADD_OR_UPDATE_CONVERSATION", {
+              conversation: msg.conversation, // pode estar incompleto  
+              userId: user.value?._id, // meu ID
+              senderId: msg.sender?._id // quem enviou a mensagem 
+            });
 
             // Se não for mensagem minha
             if (!isFromMe) {
+
               // Adiciona mensagem no chat (mesmo se estiver em outra conversa)
               store.commit("ADD_MESSAGE_REALTIME", {
-                convId: msg.conversation._id,
-                message: msg
+                convId: msg.conversation._id, // pode ser incompleto
+                message: msg // mensagem completa 
               });
 
-              // Toca som SOMENTE se:
-              // - Não estou na conversa que recebeu a mensagem
-              // OU
-              // - Estou na conversa, mas a aba está em segundo plano (opcional)
+              // Tocar som de notificação
+              await playNotificationSound();  
+
+              // Verifica se a conversa aberta é essa
               const isChatOpen = currentConvId === msg.conversation._id;
-              const isAppVisible = !document.hidden;
 
               // Marca como lido automaticamente só se eu estiver vendo exatamente essa conversa
-              if (isChatOpen && isAppVisible && route.name === 'Messages') {
+              if (isChatOpen && route.name === 'Messages') {
+                // Marca como lido
                 await store.dispatch("markAsRead", msg.conversation._id);
               }
             }
@@ -203,6 +217,7 @@ onMounted(async () => {
           // Listeners de digitação
           socket.on("user_typing_start", ({ convId, userId }) => {
             if (userId !== user.value?._id) {
+              // Atualiza estado de digitação na conversa
               store.commit("UPDATE_TYPING_ON_CONVERSATION", {
                 convId,
                 payload: true

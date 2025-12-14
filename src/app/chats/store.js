@@ -170,19 +170,20 @@ export default {
             }
         },
 
-        ADD_OR_UPDATE_CONVERSATION(state, conversation) {
+        ADD_OR_UPDATE_CONVERSATION(state, {conversation, userId, senderId}) {
             const updatedConv = conversation; // pode estar incompleto!
             const items = state.conversations.items;
 
-
+            // Verifica se a conversa já existe
             const index = items.findIndex(c => c._id === updatedConv._id);
 
+            // Se existir, atualiza; se não, adiciona
             if (index !== -1) {
                 // Atualiza apenas os campos que vieram (merge)
                 state.conversations.items[index] = {
                     ...state.conversations.items[index], // mantém tudo que já tinha
                     last_message: updatedConv.last_message,                       // sobrescreve só o que veio novo
-                    unread_count: updatedConv.unread_count,
+                    unread_count: userId === senderId ? 0 : state.conversations.items[index].unread_count + 1,
                     // Garante que campos importantes não sumam:
                     _id: updatedConv._id || state.conversations.items[index]._id,
                 };
